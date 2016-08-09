@@ -1,0 +1,56 @@
+<div class="col-md-8">
+    <div class="panel panel-primary">
+        <div class="panel-heading">新名刺</div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <th>#</th>
+                        <th>名刺</th>
+                        <th>企業名</th>
+                        <th>部署</th>
+                        <th>コンタクト</th>
+                        <th>タグ</th>
+                    </thead>
+                    <tbody ng-repeat="bizcard in topLastFive | limitTo: 5">
+                        <tr>
+                            <td>{{$index + 1}}</td>
+                            <td></td>
+                            <td>{{bizcard.name}}</td>
+                            <td>{{bizcard.company}}</td>
+                            <td><a href="mailto:">example@gmail.com</a></td>
+                            <td>
+                                <a href="#dev"><span class="label label-info">開発</span></a>
+                                <a href="#it"><span class="label label-info">IT</span></a>
+                            </td>
+                            <td><a ng-href="#bizcards/{{bizcard.id}}">Edit</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-4">
+    <div class="panel panel-success">
+        <div class="panel-heading">人気名刺</div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <th>#</th>
+                        <th>名</th>
+                        <th>部署</th>
+                    </thead>
+                    <tbody ng-repeat="rank in topRank">
+                        <tr>
+                            <td>{{$index + 1}}</td>
+                            <td>{{rank.name}}</td>
+                            <td>開発セクション</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

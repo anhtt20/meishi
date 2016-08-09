@@ -1,0 +1,59 @@
+<div class="col-md-6">
+    <h1>名刺作成 <small>マニュアル</small></h1>
+    <form class="form-horizontal" ng-submit="update(meishi)">
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">名</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" required ng-model="meishi.name" placeholder="山本　田中">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">フリガナ</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" required ng-model="meishi.furigana" placeholder="ヤマモト　タナカ">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">企業名</label>
+            <div class="col-sm-10">
+                <select class="selectpicker form-control" ng-model="meishi.company" ng-init="meishi.company='IDOM'">
+                    <option>IDOM</option>
+                    <option>DMC</option>
+                    <option>MIX</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">部署</label>
+            <div class="col-sm-10">
+                <select class="selectpicker form-control" ng-model="meishi.department" ng-init="meishi.department='開発'">
+                    <option>開発</option>
+                    <option>人事</option>
+                    <option>コールセンター</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">メアド</label>
+            <div class="col-sm-10">
+                <input type="email" class="form-control" required ng-model="meishi.email" placeholder="yamamoto@gmail.com">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">タグ</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" ng-model="meishi.tags" placeholder="#tag #game">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default">登録</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="col-md-6">
+    <div id="grid-snap">
+        Dragging is constrained to the corners of a grid <a href="http://interactjs.io/">Ref</a>  
+    </div>
+</div>

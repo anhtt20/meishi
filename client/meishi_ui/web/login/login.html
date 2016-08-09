@@ -1,0 +1,7 @@
+<form class="form-signin" ng-submit="login(loginForm)" ng-init="loginForm = {}">
+  <label for="inputEmail" class="sr-only">ID</label>
+  <input type="text" ng-model="loginForm.email" id="inputEmail" class="form-control" placeholder="メアド" required autofocus>
+  <label for="inputPassword" class="sr-only">パスワード</label>
+  <input type="text" ng-model="loginForm.password" id="inputPassword" class="form-control" placeholder="パスワード" required>
+  <button class="btn btn-lg btn-primary btn-block" type="submit">ログイン</button>
+</form>

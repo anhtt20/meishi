@@ -1,0 +1,42 @@
+<div class="input-group col-md-5">
+    <div class="input-group-btn">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">フィルタ <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+            <li><a href="#">企業名</a></li>
+            <li><a href="#">タグ</a></li>
+            <li><a href="#">部署</a></li>
+        </ul>
+    </div>
+    <input type="text" class="form-control" placeholder="で検索…" ng-model="searchText">
+    <span class="input-group-btn">
+        <button class="btn btn-default" type="button">検索！</button>
+    </span>
+    
+</div>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <th>#</th>
+            <th>名刺</th>
+            <th>企業名</th>
+            <th>部署</th>
+            <th>コンタクト</th>
+            <th>タグ</th>
+            <th></th>
+        </thead>
+        <tbody ng-repeat="bizcard in bizcards | filter:searchText ">
+            <tr>
+                <td>{{$index + 1}}</td>
+                <td></td>
+                <td>{{bizcard.name}}</td>
+                <td>{{bizcard.company}}</td>
+                <td><a href="mailto:">example@gmail.com</a></td>
+                <td>
+                    <a href="#dev"><span class="label label-info">開発</span></a>
+                    <a href="#it"><span class="label label-info">IT</span></a>
+                </td>
+                <td><a ng-href="#bizcards/{{bizcard.id}}">Edit</a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
