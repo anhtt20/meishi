@@ -18,11 +18,11 @@ module Api::V1
           @token = Token.find_by(token: token)
           if @token
             @t = Time.now
-            @current_user = @token.User
-
-            render_unauthorized if @t.to_i > @token.expired_time
+            render json: get_error(504, 'Token timeout', token) if @t.to_i > @token.expired_time.to_i
+            
+            @current_user = @token.user
           else
-            render_unauthorized
+            false
           end
         end
       end

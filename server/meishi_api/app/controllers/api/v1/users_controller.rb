@@ -14,6 +14,13 @@ module Api::V1
       end
     end
 
+    #DELETE /sign_out
+    def sign_out
+      @current_user.token.destroy
+
+      render json: {}, status: :no_content
+    end
+
     private
       #generate token key
       def generate_api_key
