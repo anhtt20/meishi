@@ -1,0 +1,41 @@
+{
+  "name": "angular-data-grid",
+  "homepage": "https://github.com/angular-data-grid/angular-data-grid.github.io",
+  "authors": [
+    "Zhuk",
+    "Alexander <alexander.zhuk83@gmail.com>"
+  ],
+  "description": "Light and flexible Data Grid for AngularJS, with built-in sorting, pagination and filtering options, unified API for client-side and server-side data fetching, seamless synchronization with browser address bar and total freedom in choosing mark-up and styling suitable for your application.",
+  "main": "dist/dataGrid.js",
+  "keywords": [
+    "DataGrid",
+    "Angular",
+    "DataGrid",
+    "Angular",
+    "table",
+    "Angular",
+    "Data",
+    "Table",
+    "AngularJS",
+    "AngularJS",
+    "grid"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "33a81fc2ab",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "33a81fc2ab4e0233a34ec31eda1def04c3fbdf74"
+  },
+  "_source": "https://github.com/angular-data-grid/angular-data-grid.github.io.git",
+  "_target": "*",
+  "_originalSource": "angular-data-grid",
+  "_direct": true
+}

@@ -1,59 +1,237 @@
-<div class="col-md-6">
-    <h1>名刺作成 <small>マニュアル</small></h1>
-    <form class="form-horizontal" ng-submit="update(meishi)">
-        <div class="form-group">
-            <label for="inputEmail3" class="col-sm-2 control-label">名</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" required ng-model="meishi.name" placeholder="山本　田中">
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="inputEmail3" class="col-sm-2 control-label">フリガナ</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" required ng-model="meishi.furigana" placeholder="ヤマモト　タナカ">
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="inputEmail3" class="col-sm-2 control-label">企業名</label>
-            <div class="col-sm-10">
-                <select class="selectpicker form-control" ng-model="meishi.company" ng-init="meishi.company='IDOM'">
-                    <option>IDOM</option>
-                    <option>DMC</option>
-                    <option>MIX</option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="inputEmail3" class="col-sm-2 control-label">部署</label>
-            <div class="col-sm-10">
-                <select class="selectpicker form-control" ng-model="meishi.department" ng-init="meishi.department='開発'">
-                    <option>開発</option>
-                    <option>人事</option>
-                    <option>コールセンター</option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="inputEmail3" class="col-sm-2 control-label">メアド</label>
-            <div class="col-sm-10">
-                <input type="email" class="form-control" required ng-model="meishi.email" placeholder="yamamoto@gmail.com">
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="inputEmail3" class="col-sm-2 control-label">タグ</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" ng-model="meishi.tags" placeholder="#tag #game">
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-default">登録</button>
-            </div>
-        </div>
-    </form>
+<div layout="column">
+    <div layout="row">
+        <h2 class="md-headline">名刺作成</h2>
+        <span flex></span>
+        <md-button ng-click="toggleSlide()"
+            ng-hide="isOpenSlide()"
+            class="md-primary">
+            名刺設定
+        </md-button>
+    </div>  
+    <md-divider></md-divider>
 </div>
-<div class="col-md-6">
-    <div id="grid-snap">
-        Dragging is constrained to the corners of a grid <a href="http://interactjs.io/">Ref</a>  
+<form layout="row" name="meishiForm" ng-submit="update(meishi)">  
+    <span flex="5"></span>      
+    <div flex layout-wrap>
+        <h4>個人情報</h4>
+        <div layout="row" flex>
+            <md-input-container flex>
+                <label>名前*</label>
+                <input type="text" md-maxlength="30" required ng-model="meishi.name" name="name">
+                 <div ng-messages="meishiForm.name.$error">
+                    <div ng-message="required">入力してください。</div>
+                    <div ng-message="md-maxlength">30桁数内入力してください。</div>
+                </div>
+            </md-input-container>
+            <md-input-container flex>
+                <label>フリガナ</label>
+                <input type="text" ng-model="meishi.furigana" name="furigana" md-maxlength="30">
+                <div ng-messages="meishiForm.furigana.$error">
+                    <div ng-message="md-maxlength">30桁数内入力してください。</div>
+                </div>
+            </md-input-container>
+        </div>
+        <div layout="row" flex>
+            <md-input-container flex>
+                <label>メールアドレス*</label>
+                <input required type="email" md-maxlength="129" ng-model="meishi.email" name="email">
+                 <div ng-messages="meishiForm.email.$error">
+                    <div ng-message="md-maxlength">129桁数内入力してください。</div>
+                    <div ng-message-exp="['required', 'email']">正しくメールアドレスを入力してください。</div>
+                </div>
+            </md-input-container>
+        </div>
+        <div layout="row" flex>
+            <md-input-container flex>
+                <label>携帯番号*</label>
+                <input type="text" ng-model="meishi.tel" name="tel" required md-maxlength="20" 
+                        ng-pattern="/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{4}[-\s\.]?[0-9]{4}$/">
+                 <div ng-messages="meishiForm.tel.$error">
+                    <div ng-message="md-maxlength">20桁数内入力してください。</div>
+                    <div ng-message-exp="['required', 'pattern']">###-####-#### :正しく携帯番号を入力してください。</div>
+                </div>
+            </md-input-container>
+        </div>
+        <h4>企業情報</h4>
+        <div layout="row" flex>
+            <md-autocomplete flex required
+                md-input-name="c_name"
+                md-input-minlength="2"
+                md-input-maxlength="150"
+                md-search-text="meishi.c_name"
+                md-items="item in querySearch(meishi.c_name)"
+                md-item-text="item.display"
+                md-floating-label="企業名*">
+              <md-item-template>
+                <span md-highlight-text="meishi.c_name">{{item.display}}</span>
+              </md-item-template>
+              <div ng-messages="meishiForm.c_name.$error" ng-if="meishiForm.c_name.$touched">
+                <div ng-message="required">入力してください。</div>
+                <div ng-message="maxlength">150桁数内入力してください。</div>
+              </div>
+            </md-autocomplete>
+        </div>
+        <div layout="row" flex>
+            <md-autocomplete flex
+                md-input-name="department"
+                md-input-minlength="2"
+                md-input-maxlength="18"
+                md-search-text="meishi.d_name"
+                md-items="item in querySearch(meishi.d_name)"
+                md-item-text="item.display"
+                md-floating-label="部署">
+              <md-item-template>
+                <span md-highlight-text="meishi.d_name">{{item.display}}</span>
+              </md-item-template>
+              <div ng-messages="meishiForm.department.$error" ng-if="meishiForm.department.$touched">
+                <div ng-message="required">入力してください。</div>
+                <div ng-message="maxlength">150桁数内入力してください。</div>
+              </div>
+            </md-autocomplete>
+        </div>
+        <div layout="row" flex>
+            <md-input-container flex>
+                <label>郵便コード*</label>
+                <input type="text" ng-model="meishi.c_post_code" name="c_post_code" required ng-pattern="/^[0-9]{3}[-][0-9]{4}$/">
+                <div ng-messages="meishiForm.c_post_code.$error">
+                    <div ng-message="required">入力してください。</div>
+                    <div ng-message-exp="['pattern']">###-### :正しく郵便番号を入力してください。</div>
+                </div>
+            </md-input-container>
+        </div>
+        <div layout="row" flex>
+            <md-input-container flex>
+                <label>住所*</label>
+                <input type="text" ng-model="meishi.c_address" name="c_address" required md-maxlength="500">
+                <div ng-messages="meishiForm.c_address.$error">
+                    <div ng-message="required">入力してください。</div>
+                    <div ng-message-exp="['maxlength']">500桁数内入力してください。</div>
+                </div>
+            </md-input-container>
+        </div>
+        <div layout="row" flex>
+            <md-input-container flex>
+                <label>メールアドレス</label>
+                <input type="email" ng-model="meishi.c_email" name="c_email">
+                <div ng-messages="meishiForm.c_email.$error">
+                    <div ng-message-exp="['email']">正しくメールアドレスを入力してください。</div>
+                </div>
+            </md-input-container>
+        </div>
+        <div layout="row" flex>
+            <md-input-container flex>
+                <label>電話番号</label>
+                <input type="text" ng-model="meishi.c_tel" name="c_tel" md-maxlength="20" 
+                        ng-pattern="/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{4}[-\s\.]?[0-9]{4}$/">
+                 <div ng-messages="meishiForm.c_tel.$error">
+                    <div ng-message="md-maxlength">20桁数内入力してください。</div>
+                    <div ng-message-exp="['pattern']">###-####-#### :正しく携帯番号を入力してください。</div>
+                </div>
+            </md-input-container>
+            <md-input-container flex>
+                <label>ファクス</label>
+                <input type="text" ng-model="meishi.c_fax">
+            </md-input-container>
+        </div>
+        <div layout="row" flex>
+            <md-input-container flex>
+                <label>ホームページ</label>
+                <input type="text" ng-model="meishi.c_url">
+            </md-input-container>
+        </div>
+        <h4>その他</h4>
+        <div layout="row" flex>
+            <md-input-container flex>
+                <label>コメント</label>
+                <textarea ng-model="meishi.comment"></textarea>
+            </md-input-container>
+        </div>
+        <div layout="row" flex>
+            <md-chips flex ng-model="meishi.tags"
+            placeholder="タグ入力してください"></md-chips>
+        </div>
     </div>
-</div>
+    <div flex layout-padding id="gid-zone">
+        <!-- OMT -->
+        <div flex layout="row">
+            <span flex></span>
+            <div id="meishi-omt">
+                <md-card class="row dropzone omt">
+                    <p class="draggable card-name" ng-if="config.name" ng-dblclick="toggleSlide($event)">{{meishi.name}}</p>
+                    <p class="draggable card-furigana" ng-if="config.furigana" ng-dblclick="toggleSlide($event)">{{meishi.furigana}}</p>
+                    <p class="draggable card-email" ng-if="config.email" ng-dblclick="toggleSlide($event)">{{meishi.email}}</p>
+                    <p class="draggable card-tel" ng-if="config.tel" ng-dblclick="toggleSlide($event)">{{meishi.tel}}</p>
+                    <p class="draggable card-c-address" ng-if="config.c_address" ng-dblclick="toggleSlide($event)">{{meishi.c_address}}</p>
+                    <p class="draggable card-c-name" ng-if="config.c_name" ng-dblclick="toggleSlide($event)">{{meishi.c_name}}</p>
+                    <p class="draggable card-c-postcode" ng-if="config.c_post_code" ng-dblclick="toggleSlide($event)">〒{{meishi.c_post_code}}</p>
+                </md-card>
+            </div>
+            <span flex></span>
+        </div>
+        <!-- URA -->
+       <!--  <div flex layout="row">
+            <span flex></span>
+            <div id="meishi-ura"  layout-padding>
+                <md-card class="row dropzone">
+                </md-card>
+            </div>
+            <span flex></span>
+        </div> -->
+        <div layout="row" layout-align="end end">
+            <md-button class="md-accent md-raised" type="submit">登録</md-button>
+        </div>
+        <img ng-src="{{meishi.i_omt}}" alt="">
+    </div>
+</form>
+<md-sidenav class="md-sidenav-left md-whiteframe-4dp" md-component-id="slide">
+  <md-toolbar class="md-theme-light">
+    <h1 class="md-toolbar-tools">名刺設定</h1>
+  </md-toolbar>
+  <md-content layout-padding>
+    <div ng-hide="isDraw()"> 
+        <h4>表示</h4>
+         <div layout="row">
+            <span flex="20"></span>
+            <div>
+                <md-switch ng-model="config.name">
+                    名前
+                </md-switch>
+                <md-switch ng-model="config.furigana">
+                    フリガナ
+                </md-switch>
+                <md-switch ng-model="config.email">
+                    メアド
+                </md-switch>
+                <md-switch ng-model="config.tel">
+                    携帯番号
+                </md-switch>
+                <md-switch ng-model="config.c_address">
+                    住所
+                </md-switch>
+                <md-switch ng-model="config.c_name">
+                    企業名
+                </md-switch>
+                <md-switch ng-model="config.c_post_code">
+                    郵便番号
+                </md-switch>
+            </div>
+        </div>
+    </div>
+    <div ng-show="isDraw()">
+        <h4>設計</h4>
+        <div layout="row">
+            <span flex="20"></span>
+            <div>
+                <md-input-container flex>
+                    <label>サイズ</label>
+                    <input type="number" ng-model="editElement.size">
+                </md-input-container>
+                <div layout="row" layout-align="center end">
+                    <md-checkbox ng-model="editElement.B" class="style-B">B</md-checkbox>
+                    <md-checkbox ng-model="editElement.I" class="style-I">I</md-checkbox>
+                </div>
+            </div>
+        </div>
+    </div>
+  </md-content>
+</md-sidenav>

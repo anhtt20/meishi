@@ -3,14 +3,23 @@ require.config({
   paths: {
     //Angular path
     'angular': '../lib/bower_components/angular/angular',
+
     //ng-token-auth <- rails
     'angular-cookie': '../lib/bower_components/angular-cookie/angular-cookie',
     'angular-ui-route': '../lib/bower_components/angular-ui-router/release/angular-ui-router',
     'ng-token-auth': '../lib/bower_components/ng-token-auth/dist/ng-token-auth',
-    'jquery': '../lib/bower_components/jquery/dist/jquery',
-    'bootstrap': '../lib/bower_components/bootstrap/dist/js/bootstrap',
-    'bootstrap-select': '../lib/bower_components/bootstrap-select/dist/js/bootstrap-select',
-    'interact': '../lib/bower_components/interact/dist/interact',
+
+    //Angular-materia required
+    'angular-animate': '../lib/bower_components/angular-animate/angular-animate',
+    'angular-aria': '../lib/bower_components/angular-aria/angular-aria',
+    'angular-message': '../lib/bower_components/angular-messages/angular-messages',
+    'angular-material': '../lib/bower_components/angular-material/angular-material',
+
+    //htmltocanvas
+    'dom-to-image': '../lib/bower_components/dom-to-image/src/dom-to-image',
+
+    //Interact Lib
+    'interact': '../lib/bower_components/interact/interact',
 
     //App deps
     'app-module': 'master/app.module',
@@ -42,14 +51,31 @@ require.config({
 
     'app-module': {
       deps: [
-        'angular', 'angular-cookie', 'ng-token-auth', 'angular-ui-route', 'bootstrap'
+        'angular', 'angular-cookie', 'ng-token-auth', 'angular-ui-route', 'angular-material'
       ]
     },
 
-    'bootstrap': {
-      deps: ['jquery']
+    'angular-material': {
+      deps: [
+        'angular', 'angular-animate', 'angular-aria', 'angular-message'
+      ]
     },
-    // 'bootstrap-select':
+    'angular-aria': {
+      deps: ['angular']
+    },
+    'angular-animate': {
+      deps: ['angular']
+    },
+    'angular-message': {
+      deps: ['angular']
+    },
+    'angular-datagrid': {
+      deps: ['angular']
+    },
+    'angular-paging': {
+      deps: ['angular']
+    },
+
     'app-controller': {
       deps: ['angular', 'app-module']
     },
@@ -69,7 +95,7 @@ require.config({
       deps: ['angular', 'angular-cookie']
     },
     'updateCtrl': {
-      deps: ['updateFactory']
+      deps: ['updateFactory' , 'dom-to-image']
     }
 
   }

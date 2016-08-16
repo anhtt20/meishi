@@ -1,56 +1,33 @@
-<div class="col-md-8">
-    <div class="panel panel-primary">
-        <div class="panel-heading">新名刺</div>
-        <div class="panel-body">
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <th>#</th>
-                        <th>名刺</th>
-                        <th>企業名</th>
-                        <th>部署</th>
-                        <th>コンタクト</th>
-                        <th>タグ</th>
-                    </thead>
-                    <tbody ng-repeat="bizcard in topLastFive | limitTo: 5">
-                        <tr>
-                            <td>{{$index + 1}}</td>
-                            <td></td>
-                            <td>{{bizcard.name}}</td>
-                            <td>{{bizcard.company}}</td>
-                            <td><a href="mailto:">example@gmail.com</a></td>
-                            <td>
-                                <a href="#dev"><span class="label label-info">開発</span></a>
-                                <a href="#it"><span class="label label-info">IT</span></a>
-                            </td>
-                            <td><a ng-href="#bizcards/{{bizcard.id}}">Edit</a></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="col-md-4">
-    <div class="panel panel-success">
-        <div class="panel-heading">人気名刺</div>
-        <div class="panel-body">
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <th>#</th>
-                        <th>名</th>
-                        <th>部署</th>
-                    </thead>
-                    <tbody ng-repeat="rank in topRank">
-                        <tr>
-                            <td>{{$index + 1}}</td>
-                            <td>{{rank.name}}</td>
-                            <td>開発セクション</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
+<md-content flex="70">
+    <h3>新名刺</h3>
+    <md-divider></md-divider>
+    <md-grid-list
+        md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
+        md-row-height-gt-md="1:1" md-row-height="2:2"
+        md-gutter="12px" md-gutter-gt-sm="8px" >
+        <md-grid-tile class="gray"
+            md-rowspan="1" md-colspan="2" md-colspan-sm="1" md-colspan-xs="1">
+            <img style="max-width: 100%;max-height: 100%;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Meishi-example.svg/2000px-Meishi-example.svg.png" alt="">
+        </md-grid-tile>
+        <md-grid-tile class="gray"
+            md-rowspan="1" md-colspan="2" md-colspan-sm="1" md-colspan-xs="1">
+            <img style="max-width: 100%;max-height: 100%;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Meishi-example.svg/2000px-Meishi-example.svg.png" alt="">
+        </md-grid-tile>
+        <md-grid-tile class="gray"
+            md-rowspan="1" md-colspan="2" md-colspan-sm="1" md-colspan-xs="1">
+            <img style="max-width: 100%;max-height: 100%;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Meishi-example.svg/2000px-Meishi-example.svg.png" alt="">
+        </md-grid-tile>
+        <md-grid-tile class="gray"
+            md-rowspan="1" md-colspan="2" md-colspan-sm="1" md-colspan-xs="1">
+            <img style="max-width: 100%;max-height: 100%;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Meishi-example.svg/2000px-Meishi-example.svg.png" alt="">
+        </md-grid-tile>
+        <md-grid-tile class="gray"
+            md-rowspan="1" md-colspan="2" md-colspan-sm="1" md-colspan-xs="1">
+            <img style="max-width: 100%;max-height: 100%;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Meishi-example.svg/2000px-Meishi-example.svg.png" alt="">
+        </md-grid-tile>
+        <md-grid-tile class="gray"
+            md-rowspan="1" md-colspan="2" md-colspan-sm="1" md-colspan-xs="1">
+            <img style="max-width: 100%;max-height: 100%;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Meishi-example.svg/2000px-Meishi-example.svg.png" alt="">
+        </md-grid-tile>
+    </md-grid-list>
+</md-content>

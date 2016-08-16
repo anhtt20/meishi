@@ -1,45 +1,35 @@
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" ui-sref="dashboard">ホアンホアン</a>
+<div layout="column" layout-fill>
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <md-button ng-href="#/dashboard">
+                ホアンホアん
+            </md-button>
+            <md-button ng-href="#/filter/all">
+                検索
+            </md-button>
+            <md-button ng-href="#/update/new">
+                追加
+            </md-button>
+            <span flex></span>
+            <md-fab-speed-dial md-direction="left" class="md-fling" md-open="false" ng-cloak>
+              <md-fab-trigger>
+                <md-button class="md-raised md-primary">ホアンさん、ようこそ！</md-button>
+              </md-fab-trigger>
+              <md-fab-actions>
+                <md-button ng-href="#/filter/me">
+                    マイ名刺
+                </md-button>
+                <md-button ng-href="#/bizcards/me">
+                    プロファイル
+                </md-button>
+                <md-button ng-click="signout()">
+                    ログアウト
+                </md-button>
+              </md-fab-actions>
+            </md-fab-speed-dial>
         </div>
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li class="">
-                    <a ui-sref="filter">名刺検索</a>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">名刺
-                        <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#/update/new">追加</a></li>
-                        <li><a href="#/filter/self">作成した名刺</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{uid}}、よろこそ！
-                        <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#/bizcards/owner">情報</a></li>
-                        <li><a href="#">パスワード変更</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="#/signin" ng-click="signout()">ログアウト</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-<div ui-view></div>
+    </md-toolbar>
+  <!--Note: for scrollShrink to work, the toolbar must be a sibling of a md-content element, placed before it.-->
+    <md-content flex ui-view layout-padding>
+    </md-content>
+</div>

@@ -1,15 +1,15 @@
 <html>
     <head>
-        <meta charset="UTF-8">
-        <title>App</title>
-        <link rel="stylesheet" href="/lib/bower_components/bootstrap/dist/css/bootstrap.css"></link>
-        <link rel="stylesheet" href="app.css">
+        <title>{{Title}}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Angular Material style sheet -->
+        <!-- <link rel="stylesheet" href="../lib/bower_components/normalize-css/normalize.css"> -->
+        <link rel="stylesheet" href="../lib/bower_components/angular-material/angular-material.min.css">
+        <link rel="stylesheet" type="text/css" href="app.css">
     </head>
-    <body>
-        <div class="container-fluid"  data-ui-view="content">
-            
+    <body ng-cloak>
+        <div flex layout="row" layout-fill data-ui-view="content">
         </div>
         <script src="/lib/bower_components/requirejs/require.js" data-main="main.js"></script>
-        <script src="/lib/bower_components/interact/dist/interact.js"></script>
     </body>
 </html>

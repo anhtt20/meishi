@@ -15,7 +15,7 @@ define(function() {
                 name: 'Hoang',
                 furigana: 'ホアン',
                 company: 'IDOM',
-                deparment: '開発部',
+                department: '開発部',
                 owner: true,
                 createBy: 'hoang'
               }, {
@@ -23,7 +23,7 @@ define(function() {
                 name: '大輔',
                 furigana: 'フリガナ',
                 company: '秋川牧園',
-                deparment: '総務部',
+                department: '総務部',
                 owner: false,
                 createBy: 'hoang'
               }, {
@@ -31,7 +31,7 @@ define(function() {
                 name: '誠',
                 furigana: 'フリガナ',
                 company: 'IDOM',
-                deparment: '人事部',
+                department: '人事部',
                 owner: false,
                 createBy: 'hoang'
               }, {
@@ -39,7 +39,7 @@ define(function() {
                 name: '直樹',
                 furigana: 'フリガナ',
                 company: '極洋',
-                deparment: '営業部',
+                department: '営業部',
                 owner: false,
                 createBy: 'hoang'
               }, {
@@ -47,7 +47,7 @@ define(function() {
                 name: '哲也',
                 furigana: 'フリガナ',
                 company: '小岩井農場',
-                deparment: '開発部',
+                department: '開発部',
                 owner: false,
                 createBy: 'hoang'
               }, {
@@ -55,7 +55,7 @@ define(function() {
                 name: '久美子',
                 furigana: 'フリガナ',
                 company: '小林種苗',
-                deparment: '開発部',
+                department: '開発部',
                 owner: false,
                 createBy: 'demo'  
               }];

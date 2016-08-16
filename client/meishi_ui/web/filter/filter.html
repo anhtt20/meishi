@@ -1,42 +1,83 @@
-<div class="input-group col-md-5">
-    <div class="input-group-btn">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">フィルタ <span class="caret"></span></button>
-        <ul class="dropdown-menu">
-            <li><a href="#">企業名</a></li>
-            <li><a href="#">タグ</a></li>
-            <li><a href="#">部署</a></li>
-        </ul>
+<form ng-submit="search()" flex>
+    <h2 class="">名刺検索</h2>
+    <md-divider></md-divider>
+    <div layout="row">
+        <span flex="10"></span>
+        <md-content flex layout="row" layout-align="center center">
+            <md-input-container flex>
+                <label>キーワード</label>
+                <input type="text" ng-model="searchText" md-select-on-focus>
+            </md-input-container>
+            <md-button ng-click="toggleSlide()">
+                オプション
+            </md-button>
+        </md-content>
+        <div flex="20" layout="row" layout-align="center center">
+            <md-button class="md-primary" type="submit">検索</md-button>
+        </div>
     </div>
-    <input type="text" class="form-control" placeholder="で検索…" ng-model="searchText">
-    <span class="input-group-btn">
-        <button class="btn btn-default" type="button">検索！</button>
-    </span>
-    
-</div>
-<div class="table-responsive">
-    <table class="table">
-        <thead>
-            <th>#</th>
-            <th>名刺</th>
-            <th>企業名</th>
-            <th>部署</th>
-            <th>コンタクト</th>
-            <th>タグ</th>
-            <th></th>
-        </thead>
-        <tbody ng-repeat="bizcard in bizcards | filter:searchText ">
-            <tr>
-                <td>{{$index + 1}}</td>
-                <td></td>
-                <td>{{bizcard.name}}</td>
-                <td>{{bizcard.company}}</td>
-                <td><a href="mailto:">example@gmail.com</a></td>
-                <td>
-                    <a href="#dev"><span class="label label-info">開発</span></a>
-                    <a href="#it"><span class="label label-info">IT</span></a>
-                </td>
-                <td><a ng-href="#bizcards/{{bizcard.id}}">Edit</a></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+</form>
+<md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="search-config">
+  <md-toolbar class="md-theme-light">
+    <h1 class="md-toolbar-tools">検索設定</h1>
+  </md-toolbar>
+  <md-content layout-padding>
+    <md-input-container>
+        <label>検索フィールド</label>
+        <md-select ng-model="searchBy">
+            <md-optgroup label="検索フィールド">
+                <md-option ng-value="0">全て</md-option>
+                <md-option ng-value="1">名前</md-option>
+                <md-option ng-value="2">企業名</md-option>
+            </md-optgroup>
+        </md-select>
+    </md-input-container>
+    <md-content layout="row">
+        <md-input-container flex>
+            <label>オーダーフィールド</label>
+            <md-select ng-model="searchBy">
+                <md-optgroup label="オーダーフィールド">
+                    <md-option ng-value="0">ID</md-option>
+                    <md-option ng-value="1">名前</md-option>
+                    <md-option ng-value="2">企業名</md-option>
+                </md-optgroup>
+            </md-select>
+        </md-input-container>
+        <md-input-container flex>
+            <label>順番</label>
+            <md-select ng-model="searchBy">
+                <md-optgroup label="順番">
+                    <md-option ng-value="0">昇順</md-option>
+                    <md-option ng-value="1">降順</md-option>
+                </md-optgroup>
+            </md-select>
+        </md-input-container>
+    </md-content>  
+  </md-content>
+</md-sidenav>
+
+<md-content layout-padding layout-wrap>
+    <md-list>
+      <md-list-item  ng-repeat="bizcard in bizcards | filter:searchText " class="md-2-line" ng-repeat="item in todos">
+        <div layout="row" layout-padding flex>
+            <img height="208px" width="344px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Meishi-example.svg/2000px-Meishi-example.svg.png" alt="">
+            <div flex>
+                <h3>{{bizcard.name}}</h3>
+                <span>{{bizcard.furigana}}</span>
+                <span>{{bizcard.email}}</span>
+                <span>{{bizcard.tel}}</span>
+            </div>
+            <div flex>
+                <h3>{{bizcard.name}}</h3>
+                <span>{{bizcard.furigana}}</span>
+                <span>{{bizcard.email}}</span>
+                <span>{{bizcard.tel}}</span>
+            </div>
+            <div>
+                <md-button>content</md-button>
+            </div>
+        </div>
+        <md-divider></md-divider>
+      </md-list-item>
+    </md-list>
+</md-content>

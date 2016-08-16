@@ -18,11 +18,13 @@ define(function() {
         app_cached_providers.$provide = provide;
       }
     ])
+    //ng-auth-token config
     .config(function($authProvider) {
       $authProvider.configure({
         apiUrl: 'http://api.localhost:3000'
       });
     })
+    //Routes config
     .config(['$stateProvider', '$urlRouterProvider',
       function($stateProvider, $urlRouterProvider) {
 
@@ -100,7 +102,7 @@ define(function() {
             }
           });
 
-          //Anonimous State
+        //Anonimous State
         $stateProvider
           .state("signin", {
             url: "/signin",
@@ -120,6 +122,15 @@ define(function() {
 
       }
     ])
+    //ng-Material config
+    .config(['$mdThemingProvider', function($mdThemingProvider) {
+      //Login
+      $mdThemingProvider.theme('login')
+        .primaryPalette('teal')
+        .accentPalette('amber')
+        .backgroundPalette('grey')
+        .warnPalette('deep-orange');
+    }])
     .run(['$rootScope', '$state', '$stateParams', 'authorization', 'principal',
       function($rootScope, $state, $stateParams, authorization, principal) {
         $rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
