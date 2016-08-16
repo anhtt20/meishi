@@ -1,0 +1,2 @@
+class MapComment < ApplicationRecord
+end

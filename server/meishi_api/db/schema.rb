@@ -10,7 +10,80 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160816030025) do
+ActiveRecord::Schema.define(version: 20160816073535) do
+
+  create_table "business_cards", primary_key: "business_card_id", force: :cascade do |t|
+    t.string   "name",          limit: 50,                  null: false
+    t.string   "furigana",      limit: 50
+    t.string   "email",         limit: 129,                 null: false
+    t.string   "tel",           limit: 20,                  null: false
+    t.integer  "owner_id"
+    t.datetime "recieve_date"
+    t.integer  "company_id",                                null: false
+    t.integer  "department_id",                             null: false
+    t.boolean  "deleted",                   default: false
+    t.integer  "create_by"
+    t.integer  "update_by"
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+    t.index ["business_card_id"], name: "index_business_cards_on_business_card_id", unique: true
+  end
+
+  create_table "comments", primary_key: "comment_id", force: :cascade do |t|
+    t.text     "content",    limit: 500
+    t.boolean  "deleted",                default: false
+    t.integer  "create_by"
+    t.integer  "update_by"
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+  end
+
+  create_table "companies", primary_key: "company_id", force: :cascade do |t|
+    t.string   "name",       limit: 150,                  null: false
+    t.text     "address",    limit: 1000,                 null: false
+    t.string   "email",      limit: 129
+    t.string   "tel",        limit: 20
+    t.string   "fax",        limit: 20
+    t.string   "url",        limit: 150
+    t.boolean  "deleted",                 default: false
+    t.integer  "create_by"
+    t.integer  "update_by"
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+  end
+
+  create_table "departments", primary_key: "department_id", force: :cascade do |t|
+    t.string   "name",       limit: 50,                 null: false
+    t.boolean  "deleted",               default: false
+    t.integer  "create_by"
+    t.integer  "update_by"
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+  end
+
+  create_table "file_locations", id: false, force: :cascade do |t|
+    t.string   "type",             limit: 3,   default: "OMT", null: false
+    t.integer  "business_card_id",                             null: false
+    t.string   "path",             limit: 500,                 null: false
+    t.string   "domain",           limit: 500,                 null: false
+    t.boolean  "deleted",                      default: false
+    t.integer  "create_by"
+    t.integer  "update_by"
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+    t.index ["type", "business_card_id"], name: "index_file_locations_on_type_and_business_card_id", unique: true
+  end
+
+  create_table "map_comments", id: false, force: :cascade do |t|
+    t.integer  "comment_id",                       null: false
+    t.integer  "business_card_id",                 null: false
+    t.boolean  "deleted",          default: false
+    t.integer  "create_by"
+    t.integer  "update_by"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.index ["comment_id", "business_card_id"], name: "index_map_comments_on_comment_id_and_business_card_id", unique: true
+  end
 
   create_table "map_roles", id: false, force: :cascade do |t|
     t.integer  "role_id",                    null: false
@@ -23,8 +96,28 @@ ActiveRecord::Schema.define(version: 20160816030025) do
     t.index ["role_id", "user_id"], name: "index_map_roles_on_role_id_and_user_id", unique: true
   end
 
+  create_table "map_tags", id: false, force: :cascade do |t|
+    t.integer  "tag_id",                           null: false
+    t.integer  "business_card_id",                 null: false
+    t.boolean  "deleted",          default: false
+    t.integer  "create_by"
+    t.integer  "update_by"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.index ["tag_id", "business_card_id"], name: "index_map_tags_on_tag_id_and_business_card_id", unique: true
+  end
+
   create_table "roles", primary_key: "role_id", force: :cascade do |t|
     t.string   "role_name",  limit: 10,                 null: false
+    t.boolean  "deleted",               default: false
+    t.integer  "create_by"
+    t.integer  "update_by"
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+  end
+
+  create_table "tags", primary_key: "tag_id", force: :cascade do |t|
+    t.string   "name",       limit: 30,                 null: false
     t.boolean  "deleted",               default: false
     t.integer  "create_by"
     t.integer  "update_by"

@@ -14,6 +14,5 @@ class User < ApplicationRecord
 
   has_one :token, primary_key: 'user_id', foreign_key: 'user_id'
 
-
   has_secure_password
 end

@@ -1,0 +1,2 @@
+class FileLocation < ApplicationRecord
+end
