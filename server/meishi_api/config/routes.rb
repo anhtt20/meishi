@@ -3,8 +3,10 @@ Rails.application.routes.draw do
   
   scope module: 'api' do
     namespace :v1 do
-      resources :roles
-      get 'current', to: 'roles#current'
+      #API07
+      post 'sign_in', to: 'users#sign_in'
+      # resources :roles
+      # get 'current', to: 'roles#current'
     end
   end
   #end

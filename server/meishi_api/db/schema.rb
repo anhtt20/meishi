@@ -33,12 +33,12 @@ ActiveRecord::Schema.define(version: 20160816030025) do
   end
 
   create_table "tokens", primary_key: "user_id", force: :cascade do |t|
-    t.string   "token",         limit: 60, null: false
-    t.string   "exprired_time", limit: 10, null: false
+    t.string   "token",        limit: 60, null: false
+    t.string   "expired_time", limit: 10, null: false
     t.integer  "create_by"
     t.integer  "update_by"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
   create_table "users", primary_key: "user_id", force: :cascade do |t|
