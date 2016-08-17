@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160816073535) do
+ActiveRecord::Schema.define(version: 20160817044347) do
 
   create_table "business_cards", primary_key: "business_card_id", force: :cascade do |t|
     t.string   "name",          limit: 50,                  null: false
@@ -39,8 +39,8 @@ ActiveRecord::Schema.define(version: 20160816073535) do
   end
 
   create_table "companies", primary_key: "company_id", force: :cascade do |t|
-    t.string   "name",       limit: 150,                  null: false
-    t.text     "address",    limit: 1000,                 null: false
+    t.string   "name",       limit: 150,                       null: false
+    t.text     "address",    limit: 1000,                      null: false
     t.string   "email",      limit: 129
     t.string   "tel",        limit: 20
     t.string   "fax",        limit: 20
@@ -48,8 +48,9 @@ ActiveRecord::Schema.define(version: 20160816073535) do
     t.boolean  "deleted",                 default: false
     t.integer  "create_by"
     t.integer  "update_by"
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+    t.string   "post_code",               default: "000-0000", null: false
   end
 
   create_table "departments", primary_key: "department_id", force: :cascade do |t|
