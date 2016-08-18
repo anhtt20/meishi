@@ -1,6 +1,7 @@
 module Api::V1
   class UsersController < ApiController
     skip_before_action :authenticate, only: [:sign_in]
+    skip_after_action :update_expired_time, only: [:sign_in]
     #POST /sign_in
     def sign_in
       @user = User.find_by(email: params[:email])

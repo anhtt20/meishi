@@ -2,13 +2,14 @@ module Api::V1
   class ApiController < ApplicationController
     # Generic API stuff here
     before_action :authenticate
+    after_action :update_expired_time
 
-    # rescue_from StandardError,
-    #     with: lambda { |e| render_error(e) }
-    #   Catch_Excetions = [
-    #     ActionController::MethodNotAllowed,
-    #     ActionController::UnknownHttpMethod
-    #   ]
+    rescue_from StandardError,
+        with: lambda { |e| render_error(e) }
+      Catch_Excetions = [
+        ActionController::MethodNotAllowed,
+        ActionController::UnknownHttpMethod
+      ]
 
     protected
       
@@ -49,6 +50,12 @@ module Api::V1
 
       def get_error(status, message, data)
         { 'status' => status, 'message' => message, 'data' => data }
+      end
+
+      def update_expired_time
+        @new_expired = Time.now + 60*60
+        @token.expired_time = @new_expired.to_i
+        @token.save
       end
   end
 end
