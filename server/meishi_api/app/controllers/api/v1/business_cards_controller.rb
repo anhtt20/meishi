@@ -60,7 +60,15 @@ module Api::V1
         raise @bc.errors unless @bc.save
       end
 
-      render json: @bc, status: :created
+      render json: @bc, status: :ok
+    end
+
+    #API03
+    #GET /v1/business_card/:id
+    def show
+      @bc = BusinessCard.find(params[:id])
+      raise "名刺情報は存在しておりません。" unless @bc
+      render json: @bc, status: :ok
     end
 
     private

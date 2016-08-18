@@ -7,6 +7,8 @@ Rails.application.routes.draw do
         post 'business_cards', to: 'business_cards#create'
         #API02
         put 'business_cards/:id', to: 'business_cards#update'
+        #API03
+        get 'business_cards/:id', to: 'business_cards#show'
         #API07
         post 'sign_in', to: 'users#sign_in'
         #API08
