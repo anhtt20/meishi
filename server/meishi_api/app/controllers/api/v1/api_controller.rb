@@ -7,7 +7,7 @@ module Api::V1
     rescue_from StandardError,
         with: lambda { |e| render_error(e) }
 
-        
+
     protected
       
       def render_error(exception)
@@ -47,8 +47,15 @@ module Api::V1
 
       def update_expired_time
         @new_expired = Time.now + 60*60
-        @token.expired_time = @new_expired.to_i
+        @token.expired_time = @new_expired.to_i unless @new_expired.to_i - @token.expired_time.to_i < 2
         @token.save
+      end
+
+      def write_token(token, roles)
+        roles_array = []
+        roles.each { |role| roles_array.push(role.role_name) }
+        self.headers["hh-token"] = token
+        self.headers["hh-roles"] = roles_array.map(&:inspect).join(',') 
       end
   end
 end

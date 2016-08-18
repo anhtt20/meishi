@@ -8,7 +8,8 @@ module Api::V1
       if @user and @user.authenticate(params[:password])
 
         #get current time
-        create_key        
+        token = create_key
+        write_token(token, @user.roles)
         render json: @user, status: :created
       else
         render json: get_error(401, "ログイン認証できない。", params), status: :unauthorized
@@ -33,8 +34,10 @@ module Api::V1
 
       def create_key
         @t = Time.now + 60*60
+        token = generate_api_key
         Token.find(@user.user_id).destroy if Token.exists?(user_id: @user.user_id)
-        Token.create(user_id: @user.user_id, token: generate_api_key, expired_time: @t.to_i.to_s)
+        Token.create(user_id: @user.user_id, token: token, expired_time: @t.to_i.to_s)
+        token
       end
   end
 end
