@@ -9,7 +9,7 @@ module Api::V1
       #start transaction
       ActiveRecord::Base.transaction do
         #Add new instance for business card
-        raise "名刺には存在しております。" if BusinessCard.joins(:company).where(name: params[:name], email: params[:email], 'companies.name' => params[:c_name]).exists?
+        raise "名刺には存在しております。" if BusinessCard.joins(:company).where(name: params[:name], email: params[:email], deleted: 0, 'companies.name' => params[:c_name]).exists?
         @bc = BusinessCard.new(bz_params)
         @bc.create_by = @current_user.user_id
 
@@ -36,9 +36,9 @@ module Api::V1
     #API02
     #PUT /v1/business_cards/:id
     def update
-      @bc = BusinessCard.find(params[:id])
+      @bc = BusinessCard.find_by(business_card_id: params[:id], deleted: 0)
       raise "名刺情報は存在しておりません。" unless @bc
-      raise "同じ名刺情報が存在しております。" if BusinessCard.joins(:company).where(name: params[:name], email: params[:email], 'companies.name' => params[:c_name]).exists?
+      raise "同じ名刺情報が存在しております。" if BusinessCard.joins(:company).where(name: params[:name], email: params[:email], deleted: 0, 'companies.name' => params[:c_name]).exists?
 
       ActiveRecord::Base.transaction do
         @bc.name = params[:name]
@@ -64,14 +64,45 @@ module Api::V1
     end
 
     #API03
-    #GET /v1/business_card/:id
+    #GET /v1/business_cards/:id
     def show
-      @bc = BusinessCard.find(params[:id])
+      @bc = BusinessCard.find_by(business_card_id: params[:id], deleted: 0)
       raise "名刺情報は存在しておりません。" unless @bc
       render json: @bc, status: :ok
     end
 
+    #API04
+    #GET /v1/business_cards
+    def fetch
+      #require params
+      search_required
+      #is owner
+      owner = params[:my_card] === '1' ? @current_user.user_id : nil
+      #check next index
+      next_index = params[:page_size].to_i * (params[:page].to_i - 1)
+      @bcs = BusinessCard.joins(:company, :department).
+        where("(? is null or owner_id = ?) and (? is null or #{params[:search_by]} like '%#{params[:keyword]}%')", owner, owner, params[:keyword]).
+        limit(params[:page_size]).offset(next_index).
+        order("#{params[:order_by]} #{params[:asc]}")
+      if @bcs.size == 0
+        render json: nil, status: :no_content
+      else
+        render json: @bcs
+      end
+    end
+
     private
+
+    def search_required
+      params.require(:search_by)
+      params.require(:page)
+      params.require(:page_size)
+
+      params[:order_by] = 'business_cards.business_card_id' unless params[:order_by] and params[:order_by] != ''
+      params[:asc] = 'DESC' if params[:asc] == '0'
+      params[:asc] = 'ASC' unless params[:asc] and params[:asc] != '' and params[:asc] != '1'
+    end
+
     def required_params
       params.require(:name)
       params.require(:email)
@@ -104,6 +135,7 @@ module Api::V1
       @company.tel = params[:c_tel]
       @company.fax = params[:c_fax]
       @company.url = params[:c_url]
+      @company.deleted = 0
       @company.update_by = @current_user.user_id
 
       raise @company.errors unless @company.save
@@ -114,6 +146,7 @@ module Api::V1
       @department = Department.find_by(name: params[:d_name])
       @department = Department.new(name: params[:d_name], create_by: @current_user.user_id) unless @department
       @department.update_by = @current_user.user_id
+      @department.deleted = 0
       raise @department.errors unless @department.save
       @department.department_id
     end
@@ -124,6 +157,7 @@ module Api::V1
       @omt.path = parse_image_data(params[:i_omt])
       @omt.domain = "images/"
       @omt.update_by = @current_user.user_id
+      @omt.deleted = 0
 
       raise @omt.errors unless @omt.save
     end
@@ -134,6 +168,7 @@ module Api::V1
       @ura.path = parse_image_data(params[:i_ura])
       @ura.domain = "images/"
       @ura.update_by = @current_user.user_id
+      @ura.deleted = 0
 
       raise @ura.errors unless @ura.save
     end

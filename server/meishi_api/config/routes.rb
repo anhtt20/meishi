@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  constraints subdomain: 'api' do
+  # constraints subdomain: 'api' do
 
     scope module: 'api' do
       namespace :v1 do
@@ -9,6 +9,8 @@ Rails.application.routes.draw do
         put 'business_cards/:id', to: 'business_cards#update'
         #API03
         get 'business_cards/:id', to: 'business_cards#show'
+        #API04
+        get 'business_cards', to: 'business_cards#fetch'
         #API07
         post 'sign_in', to: 'users#sign_in'
         #API08
@@ -17,5 +19,5 @@ Rails.application.routes.draw do
         # get 'current', to: 'roles#current'
       end
     end
-  end
+  # end
 end

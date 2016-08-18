@@ -6,19 +6,12 @@ module Api::V1
 
     rescue_from StandardError,
         with: lambda { |e| render_error(e) }
-      Catch_Excetions = [
-        ActionController::MethodNotAllowed,
-        ActionController::UnknownHttpMethod
-      ]
 
+        
     protected
       
       def render_error(exception)
-        status_code = ActionDispatch::ExceptionWrapper.new(env, exception).status_code
-        # 必要なエラーだけ通知
-        if Catch_Excetions.include?(exception)
-          ExceptionNotifier.notify_exception(exception, env: env, data: params)
-        end
+        status_code = ActionDispatch::ExceptionWrapper.new(request.env, exception).status_code
 
         render json: get_error(status_code, exception.message, params),
             status: status_code
