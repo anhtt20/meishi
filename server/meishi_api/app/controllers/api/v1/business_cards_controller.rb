@@ -106,10 +106,6 @@ module Api::V1
     end
 
     private
-    def render_json(json, status)
-      render json: json, status: status,
-        scope: { action: params[:action], user_id: @current_user.user_id }
-    end
 
     def search_required
       params.require(:search_by)
