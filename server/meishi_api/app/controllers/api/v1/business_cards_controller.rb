@@ -30,7 +30,7 @@ module Api::V1
         bz_ura if params[:i_ura]
       end
 
-      render json: @bc, status: :created
+      render_json(@bc, :created)
     end
 
     #API02
@@ -60,7 +60,7 @@ module Api::V1
         raise @bc.errors unless @bc.save
       end
 
-      render json: @bc, status: :ok
+      render_json(@bc, :ok)
     end
 
     #API03
@@ -68,7 +68,7 @@ module Api::V1
     def show
       @bc = BusinessCard.find_by(business_card_id: params[:id], deleted: 0)
       raise "名刺情報は存在しておりません。" unless @bc
-      render json: @bc, status: :ok
+      render_json(@bc, :ok)
     end
 
     #API04
@@ -80,18 +80,36 @@ module Api::V1
       owner = params[:my_card] === '1' ? @current_user.user_id : nil
       #check next index
       next_index = params[:page_size].to_i * (params[:page].to_i - 1)
+      #Query with conditions
       @bcs = BusinessCard.joins(:company, :department).
         where("(? is null or owner_id = ?) and (? is null or #{params[:search_by]} like '%#{params[:keyword]}%')", owner, owner, params[:keyword]).
         limit(params[:page_size]).offset(next_index).
         order("#{params[:order_by]} #{params[:asc]}")
+
+      #no elements -> No_content
       if @bcs.size == 0
         render json: nil, status: :no_content
       else
-        render json: @bcs
+        render_json(@bcs, :ok)
       end
     end
 
+    #API05
+    #DELETE /v1/business_cards/:id
+    def destroy
+      @bc = BusinessCard.find_by(business_card_id: params[:id], deleted: 0)
+      raise "名刺情報は存在しておりません。" unless @bc
+      raise "個人名刺には削除できません。" unless @bc.owner_id == @current_user.user_id
+      @bc.deleted = 1
+      raise @bc.errors unless @bc.save
+      render json: nil, status: :no_content
+    end
+
     private
+    def render_json(json, status)
+      render json: json, status: status,
+        scope: { action: params[:action], user_id: @current_user.user_id }
+    end
 
     def search_required
       params.require(:search_by)

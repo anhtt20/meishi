@@ -11,6 +11,8 @@ Rails.application.routes.draw do
         get 'business_cards/:id', to: 'business_cards#show'
         #API04
         get 'business_cards', to: 'business_cards#fetch'
+        #API05
+        delete 'business_cards/:id', to: 'business_cards#destroy'
         #API07
         post 'sign_in', to: 'users#sign_in'
         #API08
