@@ -19,9 +19,10 @@ Rails.application.routes.draw do
         post 'sign_in', to: 'users#sign_in'
         #API08
         delete 'sign_out', to: 'users#sign_out'
-        # resources :roles
-        # get 'current', to: 'roles#current'
-      end
+        #API09
+        get 'departments', to: 'departments#fetch'
+
+        end
     end
   # end
 end
