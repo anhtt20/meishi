@@ -1,13 +1,23 @@
 define(function() {
 
   angular.module('meishi')
-    .controller('appController', ['$rootScope', '$scope', '$state', 'principal',
-      function($rootScope, $scope, $state, principal) {
+    .controller('appController', ['$rootScope', '$scope', '$state', 'principal', '$http',
+      function($rootScope, $scope, $state, principal, $http) {
         //Signout
         $scope.signout = function() {
-          console.debug('OUT');
-          principal.authenticate(null);
-          $state.go('signin');
+           $http({
+              method: 'DELETE',
+              url: 'http://api.localhost:3000/v1/sign_out'
+            }).success(function(data, status, headers, config) {
+              principal.authenticate(null);
+              $state.go('signin');
+            })
+            .error(function(data, status, headers, config) {
+              // called asynchronously if an error occurs
+              // or server returns response with an error status.
+              console.log(data);
+            });
+          
         };
 
         _identity = angular.fromJson(localStorage.getItem("demo.identity"));

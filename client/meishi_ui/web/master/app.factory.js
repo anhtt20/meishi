@@ -31,10 +31,11 @@ define(function() {
             _identity = identity;
             _authenticated = identity != null;
 
-            if (identity) $cookies.putObject('meishi.identity', angular.toJson(identity));
+            if (identity) {
+              $cookies.putObject('meishi.identity', angular.toJson(identity));
+              $http.defaults.headers.common.Authorization = 'Token token=' + identity.token;
+            }
             else $cookies.remove('meishi.identity');
-
-            $http.defaults.headers.common.Authorization = 'Token token=' + identity.token;
           },
           identity: function(force) {
             var deferred = $q.defer();
@@ -68,7 +69,6 @@ define(function() {
             var self = this;
             $timeout(function() {
               _identity = angular.fromJson($cookies.getObject("meishi.identity"));
-              console.log(_identity);
               self.authenticate(_identity);
               deferred.resolve(_identity);
             }, 1000);

@@ -10,7 +10,7 @@
     </div>  
     <md-divider></md-divider>
 </div>
-<form layout="row" name="meishiForm" ng-submit="update(meishi)">  
+<form layout="row" name="meishiForm" ng-submit="showConfirm($event)">
     <span flex="5"></span>      
     <div flex layout-wrap>
         <h4>個人情報</h4>
@@ -177,7 +177,7 @@
             </div>
             <span flex></span>
         </div> -->
-        <div layout="row" layout-align="end end">
+        <div style="position: fixed;right: 0;bottom: 0;" layout="row" layout-align="end end">
             <md-button class="md-accent md-raised" type="submit">登録</md-button>
         </div>
         <img ng-src="{{meishi.i_omt}}" alt="">

@@ -1,0 +1,85 @@
+<md-dialog aria-label="確認" flex="66">
+  <form ng-cloak>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>情報確認</h2>
+        <span flex></span>
+      </div>
+    </md-toolbar>
+    <md-dialog-content>
+        <div layout-padding>
+            <div flex layout="row">
+                 <div flex layout="column">
+                    <h3>企業情報</h3>
+                    <md-input-container>
+                        <label>企業名</label>
+                        <input disabled ng-model="meishi.c_name">
+                    </md-input-container>
+                    <md-input-container>
+                        <label>部署</label>
+                        <input disabled ng-model="meishi.d_name">
+                    </md-input-container>
+                    <md-input-container>
+                        <label>郵便番号</label>
+                        <input disabled ng-model="meishi.c_post_code">
+                    </md-input-container>
+                    <md-input-container>
+                        <label>住所</label>
+                        <input disabled ng-model="meishi.c_address">
+                    </md-input-container>
+                    <md-input-container>
+                        <label>メールアドレス</label>
+                        <input disabled ng-model="meishi.c_email">
+                    </md-input-container>
+                    <md-input-container>
+                        <label>ファクス</label>
+                        <input disabled ng-model="meishi.c_fax">
+                    </md-input-container>
+                    <md-input-container>
+                        <label>電話番号</label>
+                        <input disabled ng-model="meishi.c_tel">
+                    </md-input-container>
+                    <md-input-container>
+                        <label>ホームページ</label>
+                        <input disabled ng-model="meishi.c_url">
+                    </md-input-container>
+                </div>
+                <div flex layout="column">
+                    <h3>個人情報</h3>
+                    <md-input-container>
+                        <label>名前</label>
+                        <input disabled ng-model="meishi.name">
+                    </md-input-container><md-input-container>
+                        <label>フリガナ</label>
+                        <input disabled ng-model="meishi.furigana">
+                    </md-input-container>
+                    <md-input-container>
+                        <label>メールアドレス</label>
+                        <input disabled ng-model="meishi.email">
+                    </md-input-container>
+                    <md-input-container>
+                        <label>携帯番号</label>
+                        <input disabled ng-model="meishi.tel">
+                    </md-input-container>
+                </div>
+                 <div flex layout="column">
+                    <h3>その他</h3>
+                    <md-input-container>
+                        <label>コメント</label>
+                        <textarea disabled ng-model="meishi.comment"></textarea>
+                    </md-input-container>
+                </div>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+      <md-button ng-click="cancel()">
+       キャンセル
+      </md-button>
+      <span flex></span>
+      <md-button class="md-raised md-primary"  ng-click="update(meishi)">
+        登録
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

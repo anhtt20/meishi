@@ -1,23 +1,50 @@
 define(function() {
   app_cached_providers
     .$controllerProvider
-    .register('updateCtrl', ['$rootScope', '$scope', '$state', 'updateUtil', '$q', '$timeout', '$mdSidenav', 'domtoimage',
-      function($rootScope, $scope, $state, updateUtil, $q, $timeout, $mdSidenav, domtoimage) {
+    .register('updateCtrl', ['$rootScope', '$scope', '$state', 'updateUtil', '$q', '$timeout', '$mdSidenav', 'domtoimage', '$mdDialog', '$http',
+      function($rootScope, $scope, $state, updateUtil, $q, $timeout, $mdSidenav, domtoimage, $mdDialog, $http) {
+        //Title
+        $rootScope.Title = "ホアンホアン｜追加"
 
         //Main Function
         $scope.update = function(meishi) {
-          
-          // if (updateUtil.add(meishi)) {
-          //   $state.go('dashboard');
-          // }
-          domtoimage.toPng(document.getElementById('meishi-omt'))
-            .then(function(dataUrl) {
-              $scope.meishi.i_omt = dataUrl;
-              console.log(meishi);
+          generateMeishi().then(function(e) {
+            meishi.i_omt = e;
+            $http({
+              method: 'POST',
+              url: 'http://api.localhost:3000/v1/business_cards',
+              data: angular.toJson(meishi)
+            }).success(function(data, status, headers, config) {
+              console.debug(data);
             })
-            .catch(function(error) {
-              console.error('oops, something went wrong!', error);
+            .error(function(data, status, headers, config) {
+              // called asynchronously if an error occurs
+              // or server returns response with an error status.
+              console.log(data);
             });
+          });
+
+        };
+
+        $scope.cancel = function() {
+          $mdDialog.hide();
+        };
+        $scope.showConfirm = function(ev) {
+
+          $mdDialog.show({
+              controller: 'updateCtrl',
+              templateUrl: 'update/confirm.html',
+              parent: angular.element(document.body),
+              targetEvent: ev,
+              clickOutsideToClose: true,
+              fullscreen: true // Only for -xs, -sm breakpoints.
+            })
+            .then(function(answer) {
+              $scope.status = 'You said the information was "' + answer + '".';
+            }, function() {
+              $scope.status = 'You cancelled the dialog.';
+            });
+
         };
 
         //Properties
@@ -30,9 +57,10 @@ define(function() {
           c_name: 'IDOM',
           c_address: '東京都千代田区丸の内２丁目７−３',
           c_post_code: '100-0005',
-
+          d_name: '開発者',
           tags: []
         };
+
         $scope.config = {
           name: true,
           furigana: false,
@@ -105,7 +133,7 @@ define(function() {
 
         settingDrag();
 
-        function settingDrag(){
+        function settingDrag() {
           require(['interact'], function(interact) {
 
             interact('.draggable')
@@ -139,6 +167,17 @@ define(function() {
               });
           });
         };
+
+        function generateMeishi() {
+          return domtoimage.toPng(document.getElementById('meishi-omt'))
+            .then(function(dataUrl) {
+              return dataUrl;
+            })
+            .catch(function(error) {
+              console.error('oops, something went wrong!', error);
+              return '';
+            });
+        }
       }
     ]);
 });
