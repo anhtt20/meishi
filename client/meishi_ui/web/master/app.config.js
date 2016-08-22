@@ -18,12 +18,6 @@ define(function() {
         app_cached_providers.$provide = provide;
       }
     ])
-    //ng-auth-token config
-    .config(function($authProvider) {
-      $authProvider.configure({
-        apiUrl: 'http://api.localhost:3000'
-      });
-    })
     //Routes config
     .config(['$stateProvider', '$urlRouterProvider',
       function($stateProvider, $urlRouterProvider) {

@@ -52,10 +52,8 @@ module Api::V1
     end
 
     def write_token(token, roles)
-      roles_array = []
-      roles.each { |role| roles_array.push(role.role_name) }
       self.headers["hh-token"] = token
-      self.headers["hh-roles"] = roles_array.map(&:inspect).join(',')
+      self.headers["hh-roles"] = roles[0].role_name
     end
 
     def render_json(json, status)

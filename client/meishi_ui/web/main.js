@@ -4,10 +4,9 @@ require.config({
     //Angular path
     'angular': '../lib/bower_components/angular/angular',
 
-    //ng-token-auth <- rails
-    'angular-cookie': '../lib/bower_components/angular-cookie/angular-cookie',
+    //<- rails
+    'angular-cookies': '../lib/bower_components/angular-cookies/angular-cookies',
     'angular-ui-route': '../lib/bower_components/angular-ui-router/release/angular-ui-router',
-    'ng-token-auth': '../lib/bower_components/ng-token-auth/dist/ng-token-auth',
 
     //Angular-materia required
     'angular-animate': '../lib/bower_components/angular-animate/angular-animate',
@@ -51,7 +50,7 @@ require.config({
 
     'app-module': {
       deps: [
-        'angular', 'angular-cookie', 'ng-token-auth', 'angular-ui-route', 'angular-material'
+        'angular', 'angular-cookies', 'angular-ui-route', 'angular-material'
       ]
     },
 
@@ -85,7 +84,7 @@ require.config({
     'app-factory': {
       deps: ['angular', 'app-module']
     },
-    'angular-cookie': {
+    'angular-cookies': {
       deps: ['angular']
     },
     'angular-ui-route': {

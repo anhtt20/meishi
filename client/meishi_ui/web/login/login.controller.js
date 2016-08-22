@@ -2,40 +2,35 @@ define(function() {
 
   app_cached_providers
     .$controllerProvider
-    .register('loginCtrl', ['$rootScope', '$scope', '$state', 'principal',
-      function($rootScope, $scope, $state, principal) {
-        $scope.message = "It works - from Login";
+    .register('loginCtrl', ['$rootScope', '$scope', '$state', 'principal', '$http',
+      function($rootScope, $scope, $state, principal, $http) {
 
-        $scope.$parent.isLogined = false;
-
-        // when the user logs in, fetch the posts
-        // $rootScope.$on('auth:login-success', function(ev, user) {
-        //   $scope.message = 'OK';
-        //   principal.authenticate({
-        //     name: user.email,
-        //     roles: ['User']
-        //   });
-        //   console.log(user);
-
-        //   $scope.$parent.isLogined = true;
-
-        //   if ($scope.returnToState) $state.go($scope.returnToState.name, $scope.returnToStateParams);
-        //   else $state.go('dashboard');
-        // });
+        $rootScope.Title = "ホアンホアン｜ログイン";
 
         $scope.login = function(user) {
-          principal.authenticate({
-            name: user.email,
-            roles: ['User']
-          });
-          console.log(user);
+          $http({
+              method: 'POST',
+              url: 'http://api.localhost:3000/v1/sign_in',
+              data: angular.toJson(user)
+            }).success(function(data, status, headers, config) {
+              console.debug(data);
+              principal.authenticate({
+                name: data.email,
+                roles: [headers('hh-roles')],
+                token: headers('hh-token')
+              });
 
-          $rootScope.uid = user.email;
+              $rootScope.uid = data.email;
 
-          if ($scope.returnToState) $state.go($scope.returnToState.name, $scope.returnToStateParams);
-          else $state.go('dashboard');
+              if ($scope.returnToState) $state.go($scope.returnToState.name, $scope.returnToStateParams);
+              else $state.go('dashboard');
+            })
+            .error(function(data, status, headers, config) {
+              // called asynchronously if an error occurs
+              // or server returns response with an error status.
+              console.log(data);
+            });
         }
-
       }
     ]);
 

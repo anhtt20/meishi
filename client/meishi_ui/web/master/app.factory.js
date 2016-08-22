@@ -1,8 +1,8 @@
 define(function() {
 
   angular.module('meishi')
-    .factory('principal', ['$q', '$http', '$timeout',
-      function($q, $http, $timeout) {
+    .factory('principal', ['$q', '$http', '$timeout', '$cookies',
+      function($q, $http, $timeout, $cookies) {
         var _identity = undefined,
           _authenticated = false;
 
@@ -31,19 +31,15 @@ define(function() {
             _identity = identity;
             _authenticated = identity != null;
 
-            // for this demo, we'll store the identity in localStorage. For you, it could be a cookie, sessionStorage, whatever
-            if (identity) localStorage.setItem("demo.identity", angular.toJson(identity));
-            else localStorage.removeItem("demo.identity");
+            if (identity) $cookies.putObject('meishi.identity', angular.toJson(identity));
+            else $cookies.remove('meishi.identity');
+
+            $http.defaults.headers.common.Authorization = 'Token token=' + identity.token;
           },
           identity: function(force) {
             var deferred = $q.defer();
 
             if (force === true) _identity = undefined;
-
-            // $http.get('http://api.localhost:3000/v1/current').success(function(data){
-            //   console.log(data);
-            //   console.log(data.roles);
-            // });
 
             // check and see if we have retrieved the identity data from the server. if we have, reuse it by immediately resolving
             if (angular.isDefined(_identity)) {
@@ -71,7 +67,8 @@ define(function() {
             // i put it in a timeout to illustrate deferred resolution
             var self = this;
             $timeout(function() {
-              _identity = angular.fromJson(localStorage.getItem("demo.identity"));
+              _identity = angular.fromJson($cookies.getObject("meishi.identity"));
+              console.log(_identity);
               self.authenticate(_identity);
               deferred.resolve(_identity);
             }, 1000);
