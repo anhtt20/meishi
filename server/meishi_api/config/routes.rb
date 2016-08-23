@@ -21,7 +21,8 @@ Rails.application.routes.draw do
         delete 'sign_out', to: 'users#sign_out'
         #API09
         get 'departments', to: 'departments#fetch'
-
+        #API-Register
+        post 'sign_up', to: 'users#sign_up'
         end
     end
   # end

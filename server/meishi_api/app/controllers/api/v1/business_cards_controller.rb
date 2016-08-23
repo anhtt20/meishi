@@ -124,7 +124,6 @@ module Api::V1
       params.require(:c_name)
       params.require(:c_address)
       params.require(:c_post_code)
-      params.require(:d_name)
       params.require(:i_omt)
     end
 

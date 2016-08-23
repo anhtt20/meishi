@@ -4,8 +4,8 @@ module Api::V1
     before_action :authenticate
     after_action :update_expired_time
 
-    rescue_from StandardError,
-      with: lambda { |e| render_error(e) }
+    # rescue_from StandardError,
+    #   with: lambda { |e| render_error(e) }
 
 
     protected
