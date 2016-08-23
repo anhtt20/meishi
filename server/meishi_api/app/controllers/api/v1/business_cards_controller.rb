@@ -66,7 +66,13 @@ module Api::V1
     #API03
     #GET /v1/business_cards/:id
     def show
-      @bc = BusinessCard.find_by(business_card_id: params[:id], deleted: 0)
+      #if is owner card
+      puts params
+      if params[:id] != 'me'
+        @bc = BusinessCard.find_by(business_card_id: params[:id], deleted: 0)
+      else
+        @bc = BusinessCard.find_by(owner_id: @current_user.user_id)
+      end
       raise "名刺情報は存在しておりません。" unless @bc
       render_json(@bc, :ok)
     end
@@ -76,13 +82,13 @@ module Api::V1
     def fetch
       #require params
       search_required
-      #is owner
-      owner = params[:my_card] === '1' ? @current_user.user_id : nil
+      #is my_card
+      owner = params[:my_card] == 'true' ? @current_user.user_id : nil
       #check next index
       next_index = params[:page_size].to_i * (params[:page].to_i - 1)
       #Query with conditions
       @bcs = BusinessCard.joins(:company, :department).
-        where("(? is null or owner_id = ?) and (? is null or #{params[:search_by]} like '%#{params[:keyword]}%')", owner, owner, params[:keyword]).
+        where("(? is null or business_cards.create_by = ?) and (? is null or #{params[:search_by]} like '%#{params[:keyword]}%')", owner, owner, params[:keyword]).
         limit(params[:page_size]).offset(next_index).
         order("#{params[:order_by]} #{params[:asc]}")
 
