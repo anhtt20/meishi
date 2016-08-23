@@ -53,11 +53,12 @@ module Api::V1
         #department
         @bc.department_id = bz_department if params[:d_name]
 
+
+        raise @bc.errors unless @bc.save
+
         #images
         bz_omt if params[:i_omt]
         bz_ura if params[:i_ura]
-
-        raise @bc.errors unless @bc.save
       end
 
       render_json(@bc, :ok)
@@ -171,19 +172,26 @@ module Api::V1
     end
 
     def bz_omt
-      @omt = FileLocation.find_by(file_type: 'OMT', business_card_id: @bc.id)
-      @omt = FileLocation.new(file_type: 'OMT', business_card_id: @bc.id, create_by: @current_user.user_id) unless @omt
+      @omt = FileLocation.find_by(file_type: 'OMT', business_card_id: @bc.business_card_id)
+      isupdate = true if @omt
+      @omt = FileLocation.new(file_type: 'OMT', business_card_id: @bc.business_card_id, create_by: @current_user.user_id) unless @omt
       @omt.path = parse_image_data(params[:i_omt])
       @omt.domain = "images/"
       @omt.update_by = @current_user.user_id
       @omt.deleted = 0
 
-      raise @omt.errors unless @omt.save
+      if isupdate
+        st = ActiveRecord::Base.connection.raw_connection.prepare("UPDATE file_locations SET deleted = #{@omt.deleted}, updated_at = '#{Time.now}' WHERE (file_locations.business_card_id = #{@bc.business_card_id} AND file_locations.file_type = ?")
+        st.execute('OMT')
+        st.close
+      else
+        raise @omt.errors unless @omt.save
+      end
     end
 
     def bz_ura
-      @ura = FileLocation.find_by(file_type: 'URA', business_card_id: @bc.id)
-      @ura = FileLocation.new(file_type: 'URA', business_card_id: @bc.id, create_by: @current_user.user_id) unless @ura
+      @ura = FileLocation.find_by(file_type: 'URA', business_card_id: @bc.business_card_id)
+      @ura = FileLocation.new(file_type: 'URA', business_card_id: @bc.business_card_id, create_by: @current_user.user_id) unless @ura
       @ura.path = parse_image_data(params[:i_ura])
       @ura.domain = "images/"
       @ura.update_by = @current_user.user_id
