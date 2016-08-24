@@ -5,9 +5,17 @@ define(function() {
     .register('dashboardCtrl', ['$rootScope', '$scope', '$state', 'dash',
       function($rootScope, $scope, $state, dash) {
         
-        $scope.topLastFive = dash.getLastCreate();
+        $rootScope.Title = "ホアンホアン｜ダッシュボード";
 
-        $scope.topRank = dash.getTopRank();
+        $scope.topLastFive;
+
+        dash.getLastCreate(function(data){
+          $scope.topLastFive = data;
+        });
+
+        $scope.i_path = function(domain, path) {
+          return api_static + domain + path;
+        };
 
       }
     ]);

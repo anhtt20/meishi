@@ -2,18 +2,51 @@ define(function() {
 
   app_cached_providers
     .$provide
-    .factory('bizcard', ['$q', '$http', '$filter',
-      function($q, $http, $filter) {
+    .factory('bizcard', ['$q', '$http', '$filter', '$mdDialog', '$state',
+      function($q, $http, $filter, $mdDialog, $state) {
         var loading = true;
 
-        return {
-          getItem: function(id) {
-            var bcs = angular.fromJson(localStorage.getItem("demo.bizcards"));
-            if (id == 'owner') return $filter('filter')(bcs, {owner: true })[0];
-            return $filter('filter')(bcs, {id: id })[0];
-          },
-
+        function pushError(message) {
+          var confirm = $mdDialog.confirm()
+            .title('通知')
+            .textContent(message)
+            .ok('完了');
+          $mdDialog.show(confirm)
+            .then(function() {
+                $state.go('filter', {
+                  option: 'all'
+                });
+              },
+              function() {
+                $state.go('filter', {
+                  option: 'all'
+                });
+              });
         };
+
+        return {
+          getItem: function(id, next) {
+            $http.get(api_root + 'business_cards/' + id)
+              .success(function(data, status, headers, config) {
+                //console.debug(data);
+                next(data);
+              })
+              .error(function(data, status, headers, config) {
+                pushError(data.message);
+              });
+          },
+          destoyItem: function(id, next) {
+            $http.delete(api_root + 'business_cards/' + id)
+              .success(function(data, status, headers, config) {
+                //console.debug(data);
+                next(data);
+              })
+              .error(function(data, status, headers, config) {
+                pushError(data.message);
+              });
+          }
+        };
+
       }
     ]);
 

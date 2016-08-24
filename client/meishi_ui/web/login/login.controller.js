@@ -10,7 +10,7 @@ define(function() {
         $scope.login = function(user) {
           $http({
               method: 'POST',
-              url: 'http://api.localhost:3000/v1/sign_in',
+              url: api_root + 'sign_in',
               data: angular.toJson(user)
             }).success(function(data, status, headers, config) {
               console.debug(data);

@@ -36,9 +36,9 @@ module Api::V1
     #API02
     #PUT /v1/business_cards/:id
     def update
-      @bc = BusinessCard.find_by(business_card_id: params[:id], deleted: 0)
+      @bc = BusinessCard.find_by(business_card_id: params[:id], deleted: false)
       raise "名刺情報は存在しておりません。" unless @bc
-      raise "同じ名刺情報が存在しております。" if BusinessCard.joins(:company).where(name: params[:name], email: params[:email], deleted: 0, 'companies.name' => params[:c_name]).exists?
+      raise "同じ名刺情報が存在しております。" if (@bc.name != params[:name] or @bc.email != params[:email] or @bc.company.name != params[:c_name]) and BusinessCard.joins(:company).where(name: params[:name], email: params[:email], deleted: 0, 'companies.name' => params[:c_name]).exists?
 
       ActiveRecord::Base.transaction do
         @bc.name = params[:name]
@@ -70,7 +70,7 @@ module Api::V1
       #if is owner card
       puts params
       if params[:id] != 'me'
-        @bc = BusinessCard.find_by(business_card_id: params[:id], deleted: 0)
+        @bc = BusinessCard.find_by(business_card_id: params[:id], deleted: false)
       else
         @bc = BusinessCard.find_by(owner_id: @current_user.user_id)
       end
@@ -89,7 +89,7 @@ module Api::V1
       next_index = params[:page_size].to_i * (params[:page].to_i - 1)
       #Query with conditions
       @bcs = BusinessCard.joins(:company, :department).
-        where("(? is null or business_cards.create_by = ?) and (? is null or #{params[:search_by]} like '%#{params[:keyword]}%')", owner, owner, params[:keyword]).
+        where("(? is null or business_cards.create_by = ?) and (? is null or #{params[:search_by]} like '%#{params[:keyword]}%') and business_cards.deleted = 0", owner, owner, params[:keyword]).
         limit(params[:page_size]).offset(next_index).
         order("#{params[:order_by]} #{params[:asc]}")
 
@@ -106,7 +106,7 @@ module Api::V1
     def destroy
       @bc = BusinessCard.find_by(business_card_id: params[:id], deleted: 0)
       raise "名刺情報は存在しておりません。" unless @bc
-      raise "個人名刺には削除できません。" unless @bc.owner_id == @current_user.user_id
+      raise "個人名刺には削除できません。" if @bc.owner_id == @current_user.user_id
       @bc.deleted = 1
       raise @bc.errors unless @bc.save
       render json: nil, status: :no_content
@@ -173,20 +173,14 @@ module Api::V1
 
     def bz_omt
       @omt = FileLocation.find_by(file_type: 'OMT', business_card_id: @bc.business_card_id)
-      isupdate = true if @omt
       @omt = FileLocation.new(file_type: 'OMT', business_card_id: @bc.business_card_id, create_by: @current_user.user_id) unless @omt
       @omt.path = parse_image_data(params[:i_omt])
       @omt.domain = "images/"
       @omt.update_by = @current_user.user_id
       @omt.deleted = 0
 
-      if isupdate
-        st = ActiveRecord::Base.connection.raw_connection.prepare("UPDATE file_locations SET deleted = #{@omt.deleted}, updated_at = '#{Time.now}' WHERE (file_locations.business_card_id = #{@bc.business_card_id} AND file_locations.file_type = ?")
-        st.execute('OMT')
-        st.close
-      else
-        raise @omt.errors unless @omt.save
-      end
+      raise @omt.errors unless @omt.save
+
     end
 
     def bz_ura

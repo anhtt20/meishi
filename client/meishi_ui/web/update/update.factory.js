@@ -2,38 +2,141 @@ define(function() {
 
   app_cached_providers
     .$provide
-    .factory('updateUtil', ['$q', '$http', '$filter',
-      function($q, $http, $filter) {
-        var loading = true;
+    .factory('updateUtil', ['$q', '$http', '$filter', 'domtoimage', '$mdDialog', '$state',
+      function($q, $http, $filter, domtoimage, $mdDialog, $state) {
+
+        function pushError(message) {
+          var confirm = $mdDialog.confirm()
+            .title('通知')
+            .textContent(message)
+            .ok('完了');
+          $mdDialog.show(confirm)
+            .then(function() {
+                $state.go('filter', {
+                  option: 'all'
+                });
+              },
+              function() {
+                $state.go('filter', {
+                  option: 'all'
+                });
+              });
+        };
 
         return {
-          add: function(meishi) {
-            console.log(meishi);
-            var bcs = angular.fromJson(localStorage.getItem("demo.bizcards"));
-            _identity = angular.fromJson(localStorage.getItem("demo.identity"));
-            meishi.id = bcs.lenght;
-            meishi.createBy = _identity.name;
-            meishi.owner = false;
-            bcs.push(meishi);
-            localStorage.setItem("demo.bizcards", angular.toJson(bcs));
-
-            return true;
-          },
-          all: function loadAll() {
-            var allStates = 'Alabama, Alaska, Arizona, Arkansas, California, Colorado, Connecticut, Delaware,\
-              Florida, Georgia, Hawaii, Idaho, Illinois, Indiana, Iowa, Kansas, Kentucky, Louisiana,\
-              Maine, Maryland, Massachusetts, Michigan, Minnesota, Mississippi, Missouri, Montana,\
-              Nebraska, Nevada, New Hampshire, New Jersey, New Mexico, New York, North Carolina,\
-              North Dakota, Ohio, Oklahoma, Oregon, Pennsylvania, Rhode Island, South Carolina,\
-              South Dakota, Tennessee, Texas, Utah, Vermont, Virginia, Washington, West Virginia,\
-              Wisconsin, Wyoming';
-            return allStates.split(/, +/g).map(function(state) {
-              return {
-                value: state.toLowerCase(),
-                display: state
-              };
+          add: function(meishi, next) {
+            generateMeishi('meishi-omt').then(function(e) {
+              meishi.i_omt = e;
+              $http({
+                  method: 'POST',
+                  url: api_root + 'business_cards',
+                  data: angular.toJson(meishi)
+                }).success(function(data, status, headers, config) {
+                  //console.debug(data);
+                  next(data);
+                })
+                .error(function(data, status, headers, config) {
+                  pushError(data.message);
+                });
             });
+          },
+          update: function(meishi, next) {
+            generateMeishi('meishi-omt').then(function(e) {
+              meishi.i_omt = e;
+              $http({
+                  method: 'PUT',
+                  url: api_root + 'business_cards/' + meishi.id,
+                  data: angular.toJson(meishi)
+                }).success(function(data, status, headers, config) {
+                  //console.debug(data);
+                  next(data);
+                })
+                .error(function(response) {
+                  pushError(data.message);
+                });
+            });
+          },
+          companies: function(keyword, next) {
+            $http({
+                method: 'GET',
+                url: api_root + 'companies?keyword=' + encodeURIComponent(keyword)
+              }).success(function(data, status, headers, config) {
+                //console.debug(data);
+                if (data) next(data);
+              })
+              .error(function(data, status, headers, config) {
+                console.log(data);
+              });
+          },
+          departments: function(keyword, next) {
+            $http({
+                method: 'GET',
+                url: api_root + 'departments?keyword=' + encodeURIComponent(keyword)
+              }).success(function(data, status, headers, config) {
+                //console.debug(data);
+                if (data) next(data);
+              })
+              .error(function(data, status, headers, config) {
+                console.log(data);
+              });
+          },
+          loadDrag: settingDrag(),
+          getItem: function(id, next) {
+            $http.get(api_root + 'business_cards/' + id)
+              .success(function(data, status, headers, config) {
+                //console.debug(data);
+                if (data) next(data);
+              })
+              .error(function(data, status, headers, config) {
+                pushError(data.message);
+              });
           }
+        };
+
+        function generateMeishi(element) {
+          return domtoimage.toPng(document.getElementById(element))
+            .then(function(dataUrl) {
+              return dataUrl;
+            })
+            .catch(function(error) {
+              console.error('oops, something went wrong!', error);
+              return '';
+            });
+        }
+
+        function settingDrag() {
+          require(['interact'], function(interact) {
+
+            interact('.draggable')
+              .draggable({
+                inertia: true,
+                restrict: {
+                  restriction: document.getElementById('grid-zone'),
+                  elementRect: {
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    right: 0
+                  },
+                  endOnly: true
+                }
+              })
+              .on('dragmove', function(event) {
+                var target = event.target,
+                  // keep the dragged position in the data-x/data-y attributes
+                  x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+                  y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+                // translate the element
+                target.style.webkitTransform =
+                  target.style.transform =
+                  'translate(' + x + 'px, ' + y + 'px)';
+
+                // update the posiion attributes
+                target.setAttribute('data-x', x);
+                target.setAttribute('data-y', y);
+              });
+          });
         };
       }
     ]);

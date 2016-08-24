@@ -59,11 +59,12 @@
                 md-input-minlength="2"
                 md-input-maxlength="150"
                 md-search-text="meishi.c_name"
-                md-items="item in querySearch(meishi.c_name)"
-                md-item-text="item.display"
+                md-selected-item="selectedItem"
+                md-items="item in companiesQuerySearch(meishi.c_name)"
+                md-item-text="item.name"
                 md-floating-label="企業名*">
               <md-item-template>
-                <span md-highlight-text="meishi.c_name">{{item.display}}</span>
+                <span md-highlight-text="meishi.c_name">{{item.name}}</span>
               </md-item-template>
               <div ng-messages="meishiForm.c_name.$error" ng-if="meishiForm.c_name.$touched">
                 <div ng-message="required">入力してください。</div>
@@ -77,11 +78,11 @@
                 md-input-minlength="2"
                 md-input-maxlength="18"
                 md-search-text="meishi.d_name"
-                md-items="item in querySearch(meishi.d_name)"
-                md-item-text="item.display"
+                md-items="item in departmentsQuerySearch(meishi.d_name)"
+                md-item-text="item.name"
                 md-floating-label="部署">
               <md-item-template>
-                <span md-highlight-text="meishi.d_name">{{item.display}}</span>
+                <span md-highlight-text="meishi.d_name">{{item.name}}</span>
               </md-item-template>
               <div ng-messages="meishiForm.department.$error" ng-if="meishiForm.department.$touched">
                 <div ng-message="required">入力してください。</div>
@@ -140,22 +141,27 @@
             </md-input-container>
         </div>
         <h4>その他</h4>
-        <div layout="row" flex>
+        <div layout="row" layout-align="center center">
+            <label for="">受け取り日</label>
+            <md-datepicker ng-model="meishi.recieve_date" md-placeholder="受け取り日"></md-datepicker>
+            <span flex></span>
+        </div>
+        <div layout="row" ng-hide="isUpdate" flex>
             <md-input-container flex>
                 <label>コメント</label>
                 <textarea ng-model="meishi.comment"></textarea>
             </md-input-container>
         </div>
-        <div layout="row" flex>
+        <!-- <div layout="row" flex>
             <md-chips flex ng-model="meishi.tags"
             placeholder="タグ入力してください"></md-chips>
-        </div>
+        </div> -->
     </div>
     <div flex layout-padding id="gid-zone">
         <!-- OMT -->
         <div flex layout="row">
             <span flex></span>
-            <div id="meishi-omt">
+            <div id="meishi-omt" ng-if="meishi">
                 <md-card class="row dropzone omt">
                     <p class="draggable card-name" ng-if="config.name" ng-dblclick="toggleSlide($event)">{{meishi.name}}</p>
                     <p class="draggable card-furigana" ng-if="config.furigana" ng-dblclick="toggleSlide($event)">{{meishi.furigana}}</p>

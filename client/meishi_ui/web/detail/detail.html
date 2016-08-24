@@ -2,7 +2,7 @@
     <!-- OMT -->
     <div flex layout="row">
         <span flex></span>
-        <img ng-src="{{meishi.i_omt}}" alt="">
+        <img ng-if="meishi" ng-src="{{meishi.i_omt}}" alt="">
         <span flex></span>
     </div>
     <!-- URA -->
@@ -21,61 +21,70 @@
             <h3>企業情報</h3>
             <md-input-container>
                 <label>企業名</label>
-                <input disabled ng-model="meishi.c_name">
+                <input readonly ng-model="meishi.company.name">
             </md-input-container>
             <md-input-container>
                 <label>部署</label>
-                <input disabled ng-model="meishi.d_name">
+                <input readonly ng-model="meishi.d_name">
             </md-input-container>
             <md-input-container>
                 <label>郵便番号</label>
-                <input disabled ng-model="meishi.c_post_code">
+                <input readonly ng-model="meishi.company.post_code">
             </md-input-container>
             <md-input-container>
                 <label>住所</label>
-                <input disabled ng-model="meishi.c_address">
+                <input readonly ng-model="meishi.company.address">
             </md-input-container>
             <md-input-container>
                 <label>メールアドレス</label>
-                <input disabled ng-model="meishi.c_email">
+                <input readonly ng-model="meishi.company.email">
             </md-input-container>
             <md-input-container>
                 <label>ファクス</label>
-                <input disabled ng-model="meishi.c_fax">
+                <input readonly ng-model="meishi.company.fax">
             </md-input-container>
             <md-input-container>
                 <label>電話番号</label>
-                <input disabled ng-model="meishi.c_tel">
+                <input readonly ng-model="meishi.company.tel">
             </md-input-container>
             <md-input-container>
                 <label>ホームページ</label>
-                <input disabled ng-model="meishi.c_url">
+                <input readonly ng-model="meishi.company.url">
             </md-input-container>
         </div>
         <div flex layout="column">
             <h3>個人情報</h3>
             <md-input-container>
                 <label>名前</label>
-                <input disabled ng-model="meishi.name">
+                <input readonly ng-model="meishi.name">
             </md-input-container><md-input-container>
                 <label>フリガナ</label>
-                <input disabled ng-model="meishi.furigana">
+                <input readonly ng-model="meishi.furigana">
             </md-input-container>
             <md-input-container>
                 <label>メールアドレス</label>
-                <input disabled ng-model="meishi.email">
+                <input readonly ng-model="meishi.email">
             </md-input-container>
             <md-input-container>
                 <label>携帯番号</label>
-                <input disabled ng-model="meishi.tel">
+                <input readonly ng-model="meishi.tel">
             </md-input-container>
         </div>
-         <div flex layout="column">
+        <div flex layout="column">
             <h3>その他</h3>
-            <md-input-container>
+            <md-input-container ng-repeat="comment in meishi.comments">
                 <label>コメント</label>
-                <textarea disabled ng-model="meishi.comment"></textarea>
+                <textarea readonly ng-model="comment.content"></textarea>
             </md-input-container>
+            <div layout="row" layout-align="center center">
+                <label for="">受け取り日</label>
+                <span flex></span>
+                <md-datepicker disabled ng-model="meishi.recieve_date" md-placeholder="受け取り日"></md-datepicker>
+            </div>
         </div>
     </div>
+</div>
+<div ng-if="meishi.my_card" style="position: fixed;right: 0;bottom: 0;" layout="row" layout-align="end end">
+    <md-button ng-click="showConfirm($event, meishi.business_card_id)" ng-hide="meishi.mine" class="md-raised md-button">削除</md-button>
+    <a href="#/update/{{meishi.business_card_id}}" class="md-accent md-raised md-button">変更</a>
 </div>

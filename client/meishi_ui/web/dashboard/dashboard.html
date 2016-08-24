@@ -1,33 +1,17 @@
 <md-content flex="70">
     <h3>新名刺</h3>
     <md-divider></md-divider>
+    <p></p>
     <md-grid-list
         md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"
         md-row-height-gt-md="1:1" md-row-height="2:2"
         md-gutter="12px" md-gutter-gt-sm="8px" >
-        <md-grid-tile class="gray"
+        <md-grid-tile ng-repeat="item in topLastFive" class="gray" 
             md-rowspan="1" md-colspan="2" md-colspan-sm="1" md-colspan-xs="1">
-            <img style="max-width: 100%;max-height: 100%;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Meishi-example.svg/2000px-Meishi-example.svg.png" alt="">
-        </md-grid-tile>
-        <md-grid-tile class="gray"
-            md-rowspan="1" md-colspan="2" md-colspan-sm="1" md-colspan-xs="1">
-            <img style="max-width: 100%;max-height: 100%;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Meishi-example.svg/2000px-Meishi-example.svg.png" alt="">
-        </md-grid-tile>
-        <md-grid-tile class="gray"
-            md-rowspan="1" md-colspan="2" md-colspan-sm="1" md-colspan-xs="1">
-            <img style="max-width: 100%;max-height: 100%;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Meishi-example.svg/2000px-Meishi-example.svg.png" alt="">
-        </md-grid-tile>
-        <md-grid-tile class="gray"
-            md-rowspan="1" md-colspan="2" md-colspan-sm="1" md-colspan-xs="1">
-            <img style="max-width: 100%;max-height: 100%;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Meishi-example.svg/2000px-Meishi-example.svg.png" alt="">
-        </md-grid-tile>
-        <md-grid-tile class="gray"
-            md-rowspan="1" md-colspan="2" md-colspan-sm="1" md-colspan-xs="1">
-            <img style="max-width: 100%;max-height: 100%;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Meishi-example.svg/2000px-Meishi-example.svg.png" alt="">
-        </md-grid-tile>
-        <md-grid-tile class="gray"
-            md-rowspan="1" md-colspan="2" md-colspan-sm="1" md-colspan-xs="1">
-            <img style="max-width: 100%;max-height: 100%;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Meishi-example.svg/2000px-Meishi-example.svg.png" alt="">
+            <img style="max-width: 100%;max-height: 100%;" ng-src="{{i_path(item.file_locations[0].domain,item.file_locations[0].path)}}" alt="">
+            <md-grid-tile-footer style="background-color: transparent">
+                <a href="#/bizcards/{{item.business_card_id}}" class="md-button md-primary">詳細</a>
+            </md-grid-tile-footer>
         </md-grid-tile>
     </md-grid-list>
 </md-content>

@@ -32,10 +32,13 @@ define(function() {
             _authenticated = identity != null;
 
             if (identity) {
-              $cookies.putObject('meishi.identity', angular.toJson(identity));
+              var now = new Date(),
+                exp = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 1);
+              $cookies.putObject('meishi.identity', angular.toJson(identity), {
+                expires: exp
+              });
               $http.defaults.headers.common.Authorization = 'Token token=' + identity.token;
-            }
-            else $cookies.remove('meishi.identity');
+            } else $cookies.remove('meishi.identity');
           },
           identity: function(force) {
             var deferred = $q.defer();
@@ -67,11 +70,9 @@ define(function() {
             // for the sake of the demo, we'll attempt to read the identity from localStorage. the example above might be a way if you use cookies or need to retrieve the latest identity from an api
             // i put it in a timeout to illustrate deferred resolution
             var self = this;
-            $timeout(function() {
-              _identity = angular.fromJson($cookies.getObject("meishi.identity"));
-              self.authenticate(_identity);
-              deferred.resolve(_identity);
-            }, 1000);
+            _identity = angular.fromJson($cookies.getObject("meishi.identity"));
+            self.authenticate(_identity);
+            deferred.resolve(_identity);
 
             return deferred.promise;
           }

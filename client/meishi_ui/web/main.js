@@ -103,6 +103,8 @@ require.config({
 
 
 var app_cached_providers = {};
+var api_root = 'http://api.localhost:3000/v1/';
+var api_static = 'http://api.localhost:3000/';
 
 require(['app-module', 'app-controller', 'app-factory', 'app-config'], function() {
   angular.bootstrap(document, ['meishi']);

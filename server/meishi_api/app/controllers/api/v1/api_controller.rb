@@ -4,8 +4,8 @@ module Api::V1
     before_action :authenticate
     after_action :update_expired_time
 
-    # rescue_from StandardError,
-    #   with: lambda { |e| render_error(e) }
+    rescue_from StandardError,
+      with: lambda { |e| render_error(e) }
 
 
     protected
@@ -47,8 +47,10 @@ module Api::V1
 
     def update_expired_time
       @new_expired = Time.now + 60*60
-      @token.expired_time = @new_expired.to_i unless @new_expired.to_i - @token.expired_time.to_i < 2
-      @token.save
+      if (@new_expired.to_i - @token.expired_time.to_i) > 2
+        @token.expired_time = @new_expired.to_i
+        @token.save
+      end
     end
 
     def write_token(token, roles)

@@ -1,64 +1,82 @@
 define(function() {
   app_cached_providers
     .$controllerProvider
-    .register('updateCtrl', ['$rootScope', '$scope', '$state', 'updateUtil', '$q', '$timeout', '$mdSidenav', 'domtoimage', '$mdDialog', '$http',
-      function($rootScope, $scope, $state, updateUtil, $q, $timeout, $mdSidenav, domtoimage, $mdDialog, $http) {
+    .register('updateCtrl', ['$rootScope', '$scope', '$state', 'updateUtil', '$q', '$timeout', '$mdSidenav', '$mdDialog', '$http', '$stateParams',
+      function($rootScope, $scope, $state, updateUtil, $q, $timeout, $mdSidenav, $mdDialog, $http, $stateParams) {
+        var id = $stateParams.id
+
         //Title
         $rootScope.Title = "ホアンホアン｜追加"
+          //Properties
+        $scope.meishi;
+
+        if (id != 'new') {
+          updateUtil.getItem(id, function(data) {
+            $scope.meishi = {
+              id: data.business_card_id,
+              name: data.name,
+              furigana: data.furigana,
+              email: data.email,
+              tel: data.tel,
+              recieve_date: new Date(data.recieve_date),
+              c_name: data.company ? data.company.name : null,
+              c_address: data.company ? data.company.address : null,
+              c_email: data.company ? data.company.email : null,
+              c_tel: data.company ? data.company.tel : null,
+              c_fax: data.company ? data.company.fax : null,
+              c_url: data.company ? data.company.url : null,
+              c_post_code: data.company ? data.company.post_code : null,
+              d_name: data.department ? data.department.name : null
+            };
+
+            $scope.isUpdate = true;
+          });
+        }
 
         //Main Function
         $scope.update = function(meishi) {
-          generateMeishi().then(function(e) {
-            meishi.i_omt = e;
-            $http({
-              method: 'POST',
-              url: 'http://api.localhost:3000/v1/business_cards',
-              data: angular.toJson(meishi)
-            }).success(function(data, status, headers, config) {
-              console.debug(data);
-            })
-            .error(function(data, status, headers, config) {
-              // called asynchronously if an error occurs
-              // or server returns response with an error status.
-              console.log(data);
+          if ($scope.isUpdate) {
+            updateUtil.update(meishi, function(data) {
+              $mdDialog.hide();
+              $state.go('filter', {
+                option: 'me'
+              });
             });
-          });
-
+          } else {
+            updateUtil.add(meishi, function(data) {
+              $mdDialog.hide();
+              $state.go('detail', {
+                index: data.business_card_id
+              });
+            });
+          }
         };
 
-        $scope.cancel = function() {
-          $mdDialog.hide();
-        };
         $scope.showConfirm = function(ev) {
-
-          $mdDialog.show({
-              controller: 'updateCtrl',
-              templateUrl: 'update/confirm.html',
-              parent: angular.element(document.body),
-              targetEvent: ev,
-              clickOutsideToClose: true,
-              fullscreen: true // Only for -xs, -sm breakpoints.
-            })
-            .then(function(answer) {
-              $scope.status = 'You said the information was "' + answer + '".';
-            }, function() {
-              $scope.status = 'You cancelled the dialog.';
+          var confirm = $mdDialog.confirm()
+            .title('情報確認')
+            .textContent('入力した情報は確認してください。')
+            .targetEvent(ev)
+            .ok('登録')
+            .cancel('キャンセル');
+          $mdDialog.show(confirm)
+            .then(function() {
+              if ($scope.isUpdate) {
+                updateUtil.update($scope.meishi, function(data) {
+                  $mdDialog.hide();
+                  $state.go('detail', {
+                    index: data.business_card_id
+                  });
+                });
+              } else {
+                updateUtil.add($scope.meishi, function(data) {
+                  $mdDialog.hide();
+                  $state.go('detail', {
+                    index: data.business_card_id
+                  });
+                });
+              }
             });
-
-        };
-
-        //Properties
-        $scope.states = updateUtil.all();
-        $scope.meishi = {
-          name: '田中',
-          furigana: 'タナカ',
-          email: 'tanaka@gmail.com',
-          tel: '070-1245-3456',
-          c_name: 'IDOM',
-          c_address: '東京都千代田区丸の内２丁目７−３',
-          c_post_code: '100-0005',
-          d_name: '開発者',
-          tags: []
         };
 
         $scope.config = {
@@ -112,15 +130,19 @@ define(function() {
         });
 
         //Autocomplete
-        $scope.querySearch = function(query) {
-          console.log(query);
-          var results = query ? $scope.states.filter(createFilterFor(query)) : $scope.states;
-
-          console.log(results);
+        $scope.departmentsQuerySearch = function(query) {
           var deferred = $q.defer();
-          $timeout(function() {
-            deferred.resolve(results);
-          }, Math.random() * 1000, false);
+          updateUtil.departments(query, function(data){
+            deferred.resolve(data);
+          });
+          return deferred.promise;
+        };
+
+        $scope.companiesQuerySearch = function(query) {
+          var deferred = $q.defer();
+          updateUtil.companies(query, function(data){
+            deferred.resolve(data);
+          });
           return deferred.promise;
         };
 
@@ -129,54 +151,6 @@ define(function() {
           return function filterFn(state) {
             return (state.value.indexOf(lowercaseQuery) === 0);
           };
-        }
-
-        settingDrag();
-
-        function settingDrag() {
-          require(['interact'], function(interact) {
-
-            interact('.draggable')
-              .draggable({
-                inertia: true,
-                restrict: {
-                  restriction: document.getElementById('grid-zone'),
-                  elementRect: {
-                    top: 0,
-                    left: 0,
-                    bottom: 0,
-                    right: 0
-                  },
-                  endOnly: true
-                }
-              })
-              .on('dragmove', function(event) {
-                var target = event.target,
-                  // keep the dragged position in the data-x/data-y attributes
-                  x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
-                  y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-
-                // translate the element
-                target.style.webkitTransform =
-                  target.style.transform =
-                  'translate(' + x + 'px, ' + y + 'px)';
-
-                // update the posiion attributes
-                target.setAttribute('data-x', x);
-                target.setAttribute('data-y', y);
-              });
-          });
-        };
-
-        function generateMeishi() {
-          return domtoimage.toPng(document.getElementById('meishi-omt'))
-            .then(function(dataUrl) {
-              return dataUrl;
-            })
-            .catch(function(error) {
-              console.error('oops, something went wrong!', error);
-              return '';
-            });
         }
       }
     ]);

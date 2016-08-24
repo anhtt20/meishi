@@ -6,78 +6,84 @@
         <md-content flex layout="row" layout-align="center center">
             <md-input-container flex>
                 <label>キーワード</label>
-                <input type="text" ng-model="searchText" md-select-on-focus>
+                <input type="text" ng-model="condition.keyword" md-select-on-focus>
             </md-input-container>
-            <md-button ng-click="toggleSlide()">
+            <md-button class="md-accent"  ng-click="toggleSlide()">
                 オプション
             </md-button>
         </md-content>
         <div flex="20" layout="row" layout-align="center center">
-            <md-button class="md-primary" type="submit">検索</md-button>
+            <md-button class="md-raised" type="submit">検索</md-button>
         </div>
     </div>
 </form>
-<md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="search-config">
+<md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="slide">
   <md-toolbar class="md-theme-light">
     <h1 class="md-toolbar-tools">検索設定</h1>
   </md-toolbar>
-  <md-content layout-padding>
+  <md-content layout-padding layout="column">
     <md-input-container>
         <label>検索フィールド</label>
-        <md-select ng-model="searchBy">
+        <md-select ng-model="condition.search_by">
             <md-optgroup label="検索フィールド">
-                <md-option ng-value="0">全て</md-option>
-                <md-option ng-value="1">名前</md-option>
-                <md-option ng-value="2">企業名</md-option>
+                <md-option value="business_cards.name">名前</md-option>
+                <md-option value="companies.name">企業名</md-option>
+                <md-option value="departments.name">部署名</md-option>
             </md-optgroup>
         </md-select>
     </md-input-container>
-    <md-content layout="row">
-        <md-input-container flex>
-            <label>オーダーフィールド</label>
-            <md-select ng-model="searchBy">
-                <md-optgroup label="オーダーフィールド">
-                    <md-option ng-value="0">ID</md-option>
-                    <md-option ng-value="1">名前</md-option>
-                    <md-option ng-value="2">企業名</md-option>
-                </md-optgroup>
-            </md-select>
-        </md-input-container>
-        <md-input-container flex>
-            <label>順番</label>
-            <md-select ng-model="searchBy">
-                <md-optgroup label="順番">
-                    <md-option ng-value="0">昇順</md-option>
-                    <md-option ng-value="1">降順</md-option>
-                </md-optgroup>
-            </md-select>
-        </md-input-container>
-    </md-content>  
+    <md-input-container>
+        <label>オーダーフィールド</label>
+        <md-select ng-model="condition.order_by">
+            <md-optgroup label="オーダーフィールド">
+                <md-option value="business_cards.name">名前</md-option>
+                <md-option value="companies.name">企業名</md-option>
+                <md-option value="departments.name">部署名</md-option>
+                <md-option value="business_cards.created_at">登録日</md-option>
+            </md-optgroup>
+        </md-select>
+    </md-input-container>
+    <md-input-container>
+        <label>順番</label>
+        <md-select ng-model="condition.asc">
+            <md-optgroup label="順番">
+                <md-option value="1">昇順</md-option>
+                <md-option value="0">降順</md-option>
+            </md-optgroup>
+        </md-select>
+    </md-input-container>
   </md-content>
 </md-sidenav>
-
 <md-content layout-padding layout-wrap>
-    <md-list>
+    <md-list id="filter_items">
       <md-list-item  ng-repeat="bizcard in bizcards | filter:searchText " class="md-2-line" ng-repeat="item in todos">
         <div layout="row" layout-padding flex>
-            <img height="208px" width="344px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Meishi-example.svg/2000px-Meishi-example.svg.png" alt="">
+            <img height="208px" width="344px" ng-src="{{i_path(bizcard.file_locations[0].domain,bizcard.file_locations[0].path)}}" alt="">
             <div flex>
-                <h3>{{bizcard.name}}</h3>
-                <span>{{bizcard.furigana}}</span>
-                <span>{{bizcard.email}}</span>
-                <span>{{bizcard.tel}}</span>
+                <h3>企業情報</h3>
+                <p>{{bizcard.company.name}}</p>
+                <p>{{'〒' + bizcard.company.post_code + ' ' + bizcard.company.address}}</p>
+                <p>{{bizcard.company.email}}</p>
+                <p>{{bizcard.company.tel}}</p>
             </div>
             <div flex>
-                <h3>{{bizcard.name}}</h3>
-                <span>{{bizcard.furigana}}</span>
-                <span>{{bizcard.email}}</span>
-                <span>{{bizcard.tel}}</span>
+                <h3>個人情報</h3>
+                <p>{{bizcard.name}}</p>
+                <p>{{bizcard.email}}</p>
+                <p>{{bizcard.tel}}</p>
             </div>
             <div>
-                <md-button>content</md-button>
+                <a href="#/bizcards/{{bizcard.business_card_id}}" class="md-primary md-raised md-button">詳細</a>
             </div>
         </div>
         <md-divider></md-divider>
+      </md-list-item>
+      <md-list-item ng-hide="nomore">
+        <span flex></span>
+        <md-button ng-click="loadMore()">
+            loadmore
+        </md-button>
+        <span flex></span>
       </md-list-item>
     </md-list>
 </md-content>

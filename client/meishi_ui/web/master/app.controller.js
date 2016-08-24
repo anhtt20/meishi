@@ -7,7 +7,7 @@ define(function() {
         $scope.signout = function() {
            $http({
               method: 'DELETE',
-              url: 'http://api.localhost:3000/v1/sign_out'
+              url: api_root + 'sign_out'
             }).success(function(data, status, headers, config) {
               principal.authenticate(null);
               $state.go('signin');
