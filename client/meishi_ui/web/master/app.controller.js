@@ -20,7 +20,7 @@ define(function() {
           
         };
 
-        _identity = angular.fromJson(localStorage.getItem("demo.identity"));
+        _identity = angular.fromJson($cookies.getObject("meishi.identity"));
 
         $rootScope.uid = _identity.name;
 
