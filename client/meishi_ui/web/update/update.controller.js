@@ -8,7 +8,7 @@ define(function() {
         //Title
         $rootScope.Title = "ホアンホアン｜追加"
           //Properties
-        $scope.meishi;
+        $scope.meishi = {};
 
         if (id != 'new') {
           updateUtil.getItem(id, function(data) {
@@ -18,7 +18,7 @@ define(function() {
               furigana: data.furigana,
               email: data.email,
               tel: data.tel,
-              recieve_date: new Date(data.recieve_date),
+              recieve_date: data.recieve_date ? new Date(data.recieve_date) : null,
               c_name: data.company ? data.company.name : null,
               c_address: data.company ? data.company.address : null,
               c_email: data.company ? data.company.email : null,
@@ -31,6 +31,10 @@ define(function() {
 
             $scope.isUpdate = true;
           });
+        } else {
+          if ($scope.meishi && !$scope.meishi.recieve_date) {
+            $scope.meishi.recieve_date = new Date();
+          }
         }
 
         //Main Function
@@ -132,7 +136,7 @@ define(function() {
         //Autocomplete
         $scope.departmentsQuerySearch = function(query) {
           var deferred = $q.defer();
-          updateUtil.departments(query, function(data){
+          updateUtil.departments(query, function(data) {
             deferred.resolve(data);
           });
           return deferred.promise;
@@ -140,7 +144,7 @@ define(function() {
 
         $scope.companiesQuerySearch = function(query) {
           var deferred = $q.defer();
-          updateUtil.companies(query, function(data){
+          updateUtil.companies(query, function(data) {
             deferred.resolve(data);
           });
           return deferred.promise;
