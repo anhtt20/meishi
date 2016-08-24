@@ -1,8 +1,8 @@
 define(function() {
 
   angular.module('meishi')
-    .controller('appController', ['$rootScope', '$scope', '$state', 'principal', '$http',
-      function($rootScope, $scope, $state, principal, $http) {
+    .controller('appController', ['$rootScope', '$scope', '$state', 'principal', '$http', '$cookies',
+      function($rootScope, $scope, $state, principal, $http, $cookies) {
         //Signout
         $scope.signout = function() {
            $http({

@@ -15,7 +15,7 @@ define(function() {
           if ($scope.meishi.recieve_date)
             $scope.meishi.recieve_date = new Date($scope.meishi.recieve_date);
           if (data.file_locations && data.file_locations.length > 0)
-            $scope.meishi.i_omt = 'http://api.localhost:3000/' + data.file_locations[0].domain + data.file_locations[0].path;
+            $scope.meishi.i_omt = api_static + data.file_locations[0].domain + data.file_locations[0].path;
         });
 
         $scope.showConfirm = function(ev, id) {

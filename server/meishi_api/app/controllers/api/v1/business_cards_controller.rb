@@ -88,7 +88,7 @@ module Api::V1
       #check next index
       next_index = params[:page_size].to_i * (params[:page].to_i - 1)
       #Query with conditions
-      @bcs = BusinessCard.joins(:company, :department).
+      @bcs = BusinessCard.left_outer_joins(:company, :department).
         where("(? is null or business_cards.create_by = ?) and (? is null or #{params[:search_by]} like '%#{params[:keyword]}%') and business_cards.deleted = 0", owner, owner, params[:keyword]).
         limit(params[:page_size]).offset(next_index).
         order("#{params[:order_by]} #{params[:asc]}")
