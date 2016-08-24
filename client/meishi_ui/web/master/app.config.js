@@ -53,8 +53,7 @@ define(function() {
             templateUrl: "dashboard/dashboard.html",
             controller: 'dashboardCtrl',
             resolve: {
-              loadDashboardCtrl: loadController('dashboardCtrl'),
-              loadDashboardFactory: loadController('dashboardFactory')
+              loadDashboardCtrl: loadController('dashboardCtrl')
             }
           })
           .state("filter", {
@@ -66,8 +65,7 @@ define(function() {
             templateUrl: "filter/filter.html",
             controller: 'filterCtrl',
             resolve: {
-              loadFilterCtrl: loadController('filterCtrl'),
-              loadFilterFactory: loadController('filterFactory')
+              loadFilterCtrl: loadController('filterCtrl')
             }
           })
           .state("detail", {
@@ -79,8 +77,7 @@ define(function() {
             templateUrl: "detail/detail.html",
             controller: 'detailCtrl',
             resolve: {
-              loadDetailCtrl: loadController('detailCtrl'),
-              loadDetailFactory: loadController('detailFactory')
+              loadDetailCtrl: loadController('detailCtrl')
             }
           })
           .state("update", {
@@ -111,6 +108,21 @@ define(function() {
             },
             resolve: {
               loadLoginCtrl: loadController("loginCtrl")
+            }
+          })
+          .state("register", {
+            url: "/register",
+            data: {
+              roles: []
+            },
+            views: {
+              "content": {
+                templateUrl: "register/register.html",
+                controller: "registerCtrl",
+              }
+            },
+            resolve: {
+              loadregisterCtrl: loadController("registerCtrl")
             }
           });
 

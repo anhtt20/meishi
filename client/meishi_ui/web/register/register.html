@@ -3,7 +3,7 @@
         <div layout="column"　layout-align="center center">
             <h2 style="text-align: center" >名刺システム</h2>
         </div>
-        <form name="userForm" ng-submit="login(user)">
+        <form name="userForm" ng-submit="register(user)">
             <md-input-container class="md-block">
             <label>メールアドレス</label>
             <input md-maxlength="129" required type="email" name="email" ng-model="user.email">
@@ -20,10 +20,18 @@
                 <div ng-message="md-maxlength">The description must be less than 30 characters long.</div>
             </div>
             </md-input-container>
+            <md-input-container class="md-block">
+            <label>パスワード認証</label>
+            <input md-maxlength="30" required type="password" md-no-asterisk name="password_confirmation" ng-model="user.password_confirmation">
+            <div ng-messages="userForm.password_confirmation.$error">
+                <div ng-message="required">This is required.</div>
+                <div ng-message="md-maxlength">The description must be less than 30 characters long.</div>
+            </div>
+            </md-input-container>
             <div layout="row">
-                <md-button class="md-raised md-primary" type="submit">ログイン</md-button>
+                <md-button class="md-raised md-primary" type="submit">登録</md-button>
                 <span flex></span>
-                <a class="md-button md-primary" href="#/register">新ユーザー登録</a>
+                <a class="md-button md-primary" href="#/signin">ログイン</a>
             </div>
         </form>
     </md-whiteframe>

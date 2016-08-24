@@ -29,6 +29,9 @@ require.config({
     //Login
     'loginCtrl': 'login/login.controller',
 
+    //register
+    'registerCtrl': 'register/register.controller',
+
     //Dashboard
     'dashboardCtrl': 'dashboard/dashboard.controller',
     'dashboardFactory': 'dashboard/dashboard.factory',
@@ -95,6 +98,15 @@ require.config({
     },
     'updateCtrl': {
       deps: ['updateFactory' , 'dom-to-image']
+    },
+    'detailCtrl': {
+      deps: ['detailFactory']
+    },
+    'filterCtrl': {
+      deps: ['filterFactory']
+    },
+    'dashboardCtrl': {
+      deps: ['dashboardFactory']
     }
 
   }
