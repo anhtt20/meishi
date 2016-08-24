@@ -6,6 +6,19 @@ define(function() {
         var _identity = undefined,
           _authenticated = false;
 
+        $http.defaults.transformResponse.push(function(data) {
+          auth_info = angular.fromJson($cookies.getObject("meishi.identity"));
+          if (auth_info){
+            var now = new Date(),
+                exp = new Date(now .getTime() + 60*60*1000);
+
+            $cookies.putObject('meishi.identity', angular.toJson(auth_info), {
+                expires: exp
+              });
+          }
+          return data;
+        })
+
         return {
           isIdentityResolved: function() {
             return angular.isDefined(_identity);
@@ -32,11 +45,7 @@ define(function() {
             _authenticated = identity != null;
 
             if (identity) {
-              var now = new Date(),
-                exp = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 1);
-              $cookies.putObject('meishi.identity', angular.toJson(identity), {
-                expires: exp
-              });
+              $cookies.putObject('meishi.identity', angular.toJson(identity));
               $http.defaults.headers.common.Authorization = 'Token token=' + identity.token;
             } else $cookies.remove('meishi.identity');
           },
