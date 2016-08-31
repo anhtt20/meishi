@@ -28,7 +28,7 @@ module Api::V1
         if @token
           @t = Time.now
           render json: get_error(504, 'Token timeout', token) if @t.to_i > @token.expired_time.to_i
-
+          
           @current_user = @token.user
         else
           false

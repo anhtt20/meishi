@@ -1,10 +1,8 @@
 FactoryGirl.define do
   factory :company do
-    name "MyString"
-    address "MyString"
-    email "MyString"
-    tel "MyString"
-    fax "MyString"
-    url "MyString"
+    sequence(:name) { |n| "Company #{n}" }
+    sequence(:address) { |n| "Company address #{n}" }
+    sequence(:email) { |n| "Company email #{n}" }
+    tel "000-0000-0000"
   end
 end
