@@ -5,8 +5,8 @@ class BusinessCardSerializer < ActiveModel::Serializer
               :email,
               :tel,
               :recieve_date
-  belongs_to :company
-  belongs_to :department
+  has_one :company
+  has_one :department
   has_many :file_locations
   has_many :comments, if: -> { scope[:action] != 'fetch' }
   has_one :mine do

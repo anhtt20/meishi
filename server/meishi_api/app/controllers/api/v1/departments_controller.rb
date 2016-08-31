@@ -4,7 +4,7 @@ module Api::V1
     #API09
     #GET /v1/departments
     def fetch
-      @departments = Department.where("deleted = 0 and name like '#{params[:keyword]}%'")
+      @departments = Department.select(:name).where("deleted = 0 and name like '#{params[:keyword]}%'").distinct
       if @departments
         render_json(@departments, :ok)
       else

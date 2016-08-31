@@ -24,12 +24,14 @@ define(function() {
 
         $scope.bizcards;
         filter.fetchAll($scope.condition, function(data) {
+          if (data.length < 5) $scope.nomore = true;
           $scope.bizcards = data;
         });
 
         //Functions
         $scope.search = function() {
           filter.fetchAll($scope.condition, function(data) {
+            if (data.length < 5) $scope.nomore = true;
             $scope.bizcards = data;
           });
         }

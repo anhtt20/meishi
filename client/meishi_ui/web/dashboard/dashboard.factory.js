@@ -5,22 +5,26 @@ define(function() {
     .factory('dash', ['$q', '$http', '$filter','$mdDialog', '$state',
       function($q, $http, $filter, $mdDialog, $state) {
 
-        function pushError(message) {
-          var confirm = $mdDialog.confirm()
-            .title('通知')
-            .textContent(message)
-            .ok('完了');
-          $mdDialog.show(confirm)
-            .then(function() {
-                $state.go('filter', {
-                  option: 'all'
+        function pushError(data) {
+          if (data.status == '401') {
+            $state.go('signin');
+          } else {
+            var confirm = $mdDialog.confirm()
+              .title('通知')
+              .textContent(data.message)
+              .ok('完了');
+            $mdDialog.show(confirm)
+              .then(function() {
+                  $state.go('filter', {
+                    option: 'all'
+                  });
+                },
+                function() {
+                  $state.go('filter', {
+                    option: 'all'
+                  });
                 });
-              },
-              function() {
-                $state.go('filter', {
-                  option: 'all'
-                });
-              });
+          }
         };
 
 
@@ -41,21 +45,8 @@ define(function() {
                 next(data);
               })
               .error(function(data, status, headers, config) {
-                pushError(data.message);
+                pushError(data);
               });
-          },
-          getTopRank: function(){
-            return [
-              {
-                name: 'top1'
-              },
-              {
-                name: 'top2'
-              },
-              {
-                name: 'top3'
-              }
-            ];
           }
 
         };

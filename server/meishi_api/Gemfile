@@ -16,11 +16,13 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
   # Use RSpec for specs
-  gem 'rspec-rails', '3.1.0'
+  gem 'rspec-rails'
   # Use Factory Girl for generating random test data
   gem 'factory_girl_rails'
-  # Use sqlite3 as the database for Active Record
-  gem 'sqlite3'
+  gem 'rspec-request_describer'
+  gem 'autodoc'
+  gem 'json_spec'
+  gem 'guard-rspec'
 end
 
 group :development do

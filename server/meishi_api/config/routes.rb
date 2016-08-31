@@ -4,11 +4,11 @@ Rails.application.routes.draw do
     scope module: 'api' do
       namespace :v1 do
         #API01
-        post 'business_cards', to: 'business_cards#create'
+        post 'business_cards', to: 'business_cards#create'#, as: 'create_business_card'
         #API02
-        put 'business_cards/:id', to: 'business_cards#update'
+        put 'business_cards/:id', to: 'business_cards#update'#, as: 'edit_business_card'
         #API03
-        get 'business_cards/:id', to: 'business_cards#show'
+        get 'business_cards/:id', to: 'business_cards#show'#, as: 'get_business_card'
         #API04
         get 'business_cards', to: 'business_cards#fetch'
         #API05

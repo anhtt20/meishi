@@ -8,7 +8,7 @@ class BusinessCard < ApplicationRecord
   has_many :map_comments, primary_key: 'business_card_id', foreign_key: 'business_card_id'
   has_many :comments, :through => :map_comments
   #with Company
-  has_one :company, primary_key: 'company_id', foreign_key: 'company_id'
+  belongs_to :company, primary_key: 'company_id', foreign_key: 'company_id'
   #with department
   has_one :department, primary_key: 'department_id', foreign_key: 'department_id'
   #with file_locations

@@ -53,14 +53,13 @@ module Api::V1
         #department
         @bc.department_id = bz_department if params[:d_name]
 
-
         raise @bc.errors unless @bc.save
 
         #images
         bz_omt if params[:i_omt]
         bz_ura if params[:i_ura]
       end
-
+      
       render_json(@bc, :ok)
     end
 

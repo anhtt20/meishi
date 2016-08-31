@@ -6,7 +6,7 @@ class CompanySerializer < ActiveModel::Serializer
   attribute :tel, if: :is_display?
   attribute :fax, if: :is_display?
   attribute :url, if: :is_display?
-  attribute :post_code
+  attribute :post_code, if: :is_display?
 
   def is_display?
     scope[:controller] != 'api/v1/companies'

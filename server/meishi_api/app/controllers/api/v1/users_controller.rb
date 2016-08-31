@@ -40,6 +40,8 @@ module Api::V1
         @bc.create_by = @user.user_id
         @bc.email = @user.email
         @bc.owner_id = @user.user_id
+        @bc.company_id = bz_company
+        @bc.recieve_date = Time.now
 
         raise @bc.errors unless @bc.save
 
@@ -68,6 +70,14 @@ module Api::V1
       Token.find(@user.user_id).destroy if Token.exists?(user_id: @user.user_id)
       Token.create(user_id: @user.user_id, token: token, expired_time: @t.to_i.to_s)
       token
+    end
+
+    def bz_company
+      @company = Company.find_by(name: 'IDOM Inc', post_code: '100-6425')
+      @company = Company.new(name: 'IDOM Inc', post_code: '100-6425', address: '東京都千代田丸の内2-7-3　東京ビル25階') unless @company
+
+      raise @company.errors unless @company.save
+      @company.company_id
     end
   end
 end

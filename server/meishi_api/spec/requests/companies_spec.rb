@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe "Roles", :type => :request do
-  describe "GET /roles" do
+RSpec.describe "Companies", type: :request do
+  describe "GET /companies" do
     it "works! (now write some real specs)" do
-      get roles_path
+      get '/v1/companies'
       expect(response).to have_http_status(200)
     end
   end

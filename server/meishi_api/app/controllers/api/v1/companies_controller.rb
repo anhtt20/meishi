@@ -4,7 +4,7 @@ module Api::V1
     #API06
     #GET /v1/companies
     def fetch
-      @companies = Company.where("deleted = 0 and name like '#{params[:keyword]}%'")
+      @companies = Company.select(:name).where("deleted = 0 and name like '#{params[:keyword]}%'").distinct
       if @companies
         render_json(@companies, :ok)
       else
