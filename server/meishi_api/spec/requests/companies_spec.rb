@@ -7,12 +7,11 @@ RSpec.describe "Companies", type: :request do
     @role = FactoryGirl.create(:role)
     FactoryGirl.create(:map_role, { user_id: @user.user_id, role_id: @role.role_id })
     @token = FactoryGirl.create(:token, { user_id: @user.user_id })
+    
+    @companies = FactoryGirl.create_list(:company, 2)
   end
 
   describe "Get /v1/companies" do
-    before do
-      @companies = FactoryGirl.create_list(:company, 2)
-    end
 
     it "get all companies" do
       #Call Action
